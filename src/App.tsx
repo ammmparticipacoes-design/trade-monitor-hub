@@ -18,7 +18,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <AuthProvider>
-        <BrowserRouter>
+        <BrowserRouter basename="/trading_bot">
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route

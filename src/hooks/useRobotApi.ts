@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 
-const BASE_URL = "";
+const BASE_URL = "/trading_bot";
 
 async function fetchApi<T>(endpoint: string): Promise<T> {
   const res = await fetch(`${BASE_URL}${endpoint}`);
@@ -27,7 +27,7 @@ export interface LeituraMercado {
 export function useRobotStatus() {
   return useQuery<RobotStatus>({
     queryKey: ["robot-status"],
-    queryFn: () => fetchApi<RobotStatus>("/api_status.asp"),
+    queryFn: () => fetchApi<RobotStatus>("/api/api_status.asp"),
     refetchInterval: 5000,
     retry: 1,
   });
@@ -36,7 +36,7 @@ export function useRobotStatus() {
 export function useLeituras() {
   return useQuery<LeituraMercado[]>({
     queryKey: ["leituras"],
-    queryFn: () => fetchApi<LeituraMercado[]>("/api_leituras.asp"),
+    queryFn: () => fetchApi<LeituraMercado[]>("/api/api_leituras.asp"),
     refetchInterval: 10000,
     retry: 1,
   });

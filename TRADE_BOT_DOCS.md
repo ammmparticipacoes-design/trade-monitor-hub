@@ -4,21 +4,25 @@
 
 Sistema front-end para monitoramento em tempo real de um robô de trading (SOL/USDT).
 
+**URL base:** `datebook.com.br/trading_bot/`
+
+**APIs ficam em:** `datebook.com.br/trading_bot/api/`
+
 ---
 
 ## Páginas
 
-| Rota      | Descrição                                      |
-|-----------|-------------------------------------------------|
-| `/login`  | Formulário de login (credenciais fixas)         |
-| `/`       | Dashboard — status do robô + leituras de mercado|
-| `/lucros` | Lucro diário acumulado                          |
+| Rota                      | Descrição                                      |
+|---------------------------|-------------------------------------------------|
+| `/trading_bot/login`      | Formulário de login (credenciais fixas)         |
+| `/trading_bot/`           | Dashboard — status do robô + leituras de mercado|
+| `/trading_bot/lucros`     | Lucro diário acumulado                          |
 
 ---
 
 ## APIs Consumidas
 
-### 1. `GET /api_status.asp` — Status do Robô
+### 1. `GET /trading_bot/api/api_status.asp` — Status do Robô
 
 Retorna o estado atual do robô. Atualização a cada **5 segundos**.
 
@@ -40,7 +44,7 @@ Retorna o estado atual do robô. Atualização a cada **5 segundos**.
 
 ---
 
-### 2. `GET /api_leituras.asp` — Leituras de Mercado
+### 2. `GET /trading_bot/api/api_leituras.asp` — Leituras de Mercado
 
 Retorna array com as últimas leituras do mercado, ordenadas do mais recente para o mais antigo. O front exibe as **50 primeiras**.
 
@@ -77,7 +81,7 @@ Atualização a cada **10 segundos**.
 
 ---
 
-### 3. `GET /api_operacoes.asp` — Operações Realizadas (existente)
+### 3. `GET /trading_bot/api/api_operacoes.asp` — Operações Realizadas (existente)
 
 ```json
 [
@@ -95,7 +99,7 @@ Atualização a cada **10 segundos**.
 
 ---
 
-### 4. `GET /api_trades.asp` — Trades Abertos (existente)
+### 4. `GET /trading_bot/api/api_trades.asp` — Trades Abertos (existente)
 
 ```json
 [
@@ -113,7 +117,7 @@ Atualização a cada **10 segundos**.
 
 ---
 
-### 5. `GET /api_lucros.asp` — Lucros Diários (existente)
+### 5. `GET /trading_bot/api/api_lucros.asp` — Lucros Diários (existente)
 
 ```json
 [
@@ -208,13 +212,13 @@ Atualização a cada **10 segundos**.
 
 ## Intervalos de Atualização
 
-| Endpoint          | Intervalo |
-|-------------------|-----------|
-| `/api_status.asp` | 5s        |
-| `/api_leituras.asp`| 10s      |
-| `/api_operacoes.asp`| 15s     |
-| `/api_trades.asp` | 10s       |
-| `/api_lucros.asp` | 30s       |
+| Endpoint                              | Intervalo |
+|---------------------------------------|-----------|
+| `/trading_bot/api/api_status.asp`     | 5s        |
+| `/trading_bot/api/api_leituras.asp`   | 10s       |
+| `/trading_bot/api/api_operacoes.asp`  | 15s       |
+| `/trading_bot/api/api_trades.asp`     | 10s       |
+| `/trading_bot/api/api_lucros.asp`     | 30s       |
 
 ---
 
