@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 
-const BASE_URL = "";
+const BASE_URL = "/trading_bot";
 
 async function fetchApi<T>(endpoint: string): Promise<T> {
   const res = await fetch(`${BASE_URL}${endpoint}`);
@@ -43,7 +43,7 @@ export interface LucroDia {
 export function useOperacoes() {
   return useQuery<Operacao[]>({
     queryKey: ["operacoes"],
-    queryFn: () => fetchApi<Operacao[]>("/api_operacoes.asp"),
+    queryFn: () => fetchApi<Operacao[]>("/api/api_operacoes.asp"),
     refetchInterval: 15000,
     retry: 1,
   });
@@ -52,7 +52,7 @@ export function useOperacoes() {
 export function useTrades() {
   return useQuery<Trade[]>({
     queryKey: ["trades"],
-    queryFn: () => fetchApi<Trade[]>("/api_trades.asp"),
+    queryFn: () => fetchApi<Trade[]>("/api/api_trades.asp"),
     refetchInterval: 10000,
     retry: 1,
   });
@@ -61,7 +61,7 @@ export function useTrades() {
 export function useLucros() {
   return useQuery<LucroDia[]>({
     queryKey: ["lucros"],
-    queryFn: () => fetchApi<LucroDia[]>("/api_lucros.asp"),
+    queryFn: () => fetchApi<LucroDia[]>("/api/api_lucros.asp"),
     refetchInterval: 30000,
     retry: 1,
   });
