@@ -8,6 +8,7 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import Login from "@/pages/Login";
 import Dashboard from "@/pages/Dashboard";
 import Lucros from "@/pages/Lucros";
+import Operacoes from "@/pages/Operacoes";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -26,6 +27,14 @@ const App = () => (
               element={
                 <ProtectedRoute>
                   <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/operacoes"
+              element={
+                <ProtectedRoute>
+                  <Operacoes />
                 </ProtectedRoute>
               }
             />
