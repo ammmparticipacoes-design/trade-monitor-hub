@@ -1,12 +1,28 @@
+import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import { BarChart3, LogOut, TrendingUp, List, Settings } from "lucide-react";
+import { BarChart3, LogOut, TrendingUp, List, Settings, Menu, X } from "lucide-react";
+
+const navItems = [
+  { to: "/", label: "Painel", icon: BarChart3 },
+  { to: "/operacoes", label: "Operações", icon: List },
+  { to: "/lucros", label: "Lucros", icon: TrendingUp },
+  { to: "/configuracao", label: "Configuração", icon: Settings },
+];
 
 const AppLayout = ({ children }: { children: React.ReactNode }) => {
   const { logout } = useAuth();
   const location = useLocation();
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const isActive = (path: string) => location.pathname === path;
+
+  const linkClass = (path: string) =>
+    `px-3 py-2 rounded-md text-sm transition-colors flex items-center gap-1.5 ${
+      isActive(path)
+        ? "bg-primary/20 text-header-foreground"
+        : "text-header-foreground/70 hover:text-header-foreground hover:bg-primary/10"
+    }`;
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -16,70 +32,57 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
             <TrendingUp className="h-5 w-5 opacity-80" />
             <span className="font-semibold text-sm tracking-wide">Trade Bot Dashboard</span>
           </div>
-          <nav className="flex items-center gap-1">
-            <Link
-              to="/"
-              className={`px-3 py-1.5 rounded-md text-sm transition-colors ${
-                isActive("/")
-                  ? "bg-primary/20 text-header-foreground"
-                  : "text-header-foreground/70 hover:text-header-foreground hover:bg-primary/10"
-              }`}
-            >
-              <span className="flex items-center gap-1.5">
-                <BarChart3 className="h-3.5 w-3.5" />
-                Painel
-              </span>
-            </Link>
-            <Link
-              to="/operacoes"
-              className={`px-3 py-1.5 rounded-md text-sm transition-colors ${
-                isActive("/operacoes")
-                  ? "bg-primary/20 text-header-foreground"
-                  : "text-header-foreground/70 hover:text-header-foreground hover:bg-primary/10"
-              }`}
-            >
-              <span className="flex items-center gap-1.5">
-                <List className="h-3.5 w-3.5" />
-                Operações
-              </span>
-            </Link>
-            <Link
-              to="/lucros"
-              className={`px-3 py-1.5 rounded-md text-sm transition-colors ${
-                isActive("/lucros")
-                  ? "bg-primary/20 text-header-foreground"
-                  : "text-header-foreground/70 hover:text-header-foreground hover:bg-primary/10"
-              }`}
-            >
-              <span className="flex items-center gap-1.5">
-                <TrendingUp className="h-3.5 w-3.5" />
-                Lucros
-              </span>
-            </Link>
-            <Link
-              to="/configuracao"
-              className={`px-3 py-1.5 rounded-md text-sm transition-colors ${
-                isActive("/configuracao")
-                  ? "bg-primary/20 text-header-foreground"
-                  : "text-header-foreground/70 hover:text-header-foreground hover:bg-primary/10"
-              }`}
-            >
-              <span className="flex items-center gap-1.5">
-                <Settings className="h-3.5 w-3.5" />
-                Configuração
-              </span>
-            </Link>
+
+          {/* Desktop nav */}
+          <nav className="hidden md:flex items-center gap-1">
+            {navItems.map((item) => (
+              <Link key={item.to} to={item.to} className={linkClass(item.to)}>
+                <item.icon className="h-3.5 w-3.5" />
+                {item.label}
+              </Link>
+            ))}
             <button
               onClick={logout}
-              className="px-3 py-1.5 rounded-md text-sm text-header-foreground/70 hover:text-header-foreground hover:bg-primary/10 transition-colors ml-2"
+              className="px-3 py-1.5 rounded-md text-sm text-header-foreground/70 hover:text-header-foreground hover:bg-primary/10 transition-colors ml-2 flex items-center gap-1.5"
             >
-              <span className="flex items-center gap-1.5">
-                <LogOut className="h-3.5 w-3.5" />
-                Sair
-              </span>
+              <LogOut className="h-3.5 w-3.5" />
+              Sair
             </button>
           </nav>
+
+          {/* Mobile hamburger */}
+          <button
+            className="md:hidden p-2 rounded-md hover:bg-primary/10 transition-colors"
+            onClick={() => setMenuOpen(!menuOpen)}
+            aria-label="Menu"
+          >
+            {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
         </div>
+
+        {/* Mobile nav dropdown */}
+        {menuOpen && (
+          <nav className="md:hidden border-t border-primary/20 px-4 py-2 space-y-1 animate-fade-in">
+            {navItems.map((item) => (
+              <Link
+                key={item.to}
+                to={item.to}
+                className={linkClass(item.to) + " w-full"}
+                onClick={() => setMenuOpen(false)}
+              >
+                <item.icon className="h-4 w-4" />
+                {item.label}
+              </Link>
+            ))}
+            <button
+              onClick={() => { setMenuOpen(false); logout(); }}
+              className="px-3 py-2 rounded-md text-sm text-header-foreground/70 hover:text-header-foreground hover:bg-primary/10 transition-colors flex items-center gap-1.5 w-full"
+            >
+              <LogOut className="h-4 w-4" />
+              Sair
+            </button>
+          </nav>
+        )}
       </header>
       <main className="flex-1 container mx-auto px-4 py-6 animate-fade-in">
         {children}
