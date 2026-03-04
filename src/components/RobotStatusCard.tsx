@@ -1,6 +1,7 @@
-import { CheckCircle2, AlertTriangle, Loader2, ShoppingCart, TrendingDown } from "lucide-react";
+import { CheckCircle2, AlertTriangle, Loader2, ShoppingCart, TrendingDown, Copy } from "lucide-react";
 import { useRobotStatus } from "@/hooks/useRobotApi";
 import { useMemo } from "react";
+import { toast } from "sonner";
 
 function timeAgo(isoDate: string): string {
   const now = Date.now();
@@ -86,6 +87,26 @@ const RobotStatusCard = () => {
           <p className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">Último Batimento</p>
           <p className="text-lg font-semibold text-foreground">{agoText}</p>
         </div>
+
+        {/* Endereço IP */}
+        {data.ip && (
+          <div className="flex-1 min-w-0">
+            <p className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">Endereço IP</p>
+            <div className="flex items-center gap-2">
+              <p className="text-lg font-semibold text-foreground">{data.ip}</p>
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(data.ip);
+                  toast.success("IP copiado para a área de transferência!");
+                }}
+                className="p-1.5 rounded-md hover:bg-muted transition-colors text-muted-foreground hover:text-foreground"
+                title="Copiar IP"
+              >
+                <Copy className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
