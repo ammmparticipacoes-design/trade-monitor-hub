@@ -12,11 +12,21 @@ Sistema front-end para monitoramento em tempo real de um robô de trading (SOL/U
 
 ## Páginas
 
-| Rota                      | Descrição                                      |
-|---------------------------|-------------------------------------------------|
-| `/trading_bot/login`      | Formulário de login (credenciais fixas)         |
-| `/trading_bot/`           | Dashboard — status do robô + leituras de mercado|
-| `/trading_bot/lucros`     | Lucro diário acumulado                          |
+| Rota                             | Descrição                                       |
+|----------------------------------|-------------------------------------------------|
+| `/trading_bot/login`             | Formulário de login                             |
+| `/trading_bot/`                  | Dashboard — status do robô + leituras de mercado|
+| `/trading_bot/operacoes`         | Operações realizadas                            |
+| `/trading_bot/lucros`            | Lucro diário acumulado                          |
+| `/trading_bot/configuracao`      | Configuração remota do robô                     |
+
+---
+
+## Credenciais de Login
+
+| Usuário      | Senha      |
+|--------------|------------|
+| `Alessandro` | `Ale@1970` |
 
 ---
 
@@ -24,9 +34,7 @@ Sistema front-end para monitoramento em tempo real de um robô de trading (SOL/U
 
 ### 1. `GET /trading_bot/api/api_status.asp` — Status do Robô
 
-Retorna o estado atual do robô. Atualização a cada **5 segundos**.
-
-**Resposta JSON:**
+Atualização a cada **5 segundos**.
 
 ```json
 {
@@ -36,21 +44,17 @@ Retorna o estado atual do robô. Atualização a cada **5 segundos**.
 }
 ```
 
-| Campo              | Tipo     | Valores possíveis          | Descrição                        |
-|--------------------|----------|----------------------------|----------------------------------|
-| `status`           | string   | `OPERANTE`, `INOPERANTE`   | Se o robô está ativo             |
-| `estado`           | string   | `COMPRADO`, `VENDIDO`      | Posição atual do robô            |
-| `ultimo_batimento` | string   | ISO 8601 datetime          | Última vez que o robô respondeu  |
+| Campo              | Tipo   | Valores possíveis        | Descrição                       |
+|--------------------|--------|--------------------------|---------------------------------|
+| `status`           | string | `OPERANTE`, `INOPERANTE` | Se o robô está ativo            |
+| `estado`           | string | `COMPRADO`, `VENDIDO`    | Posição atual do robô           |
+| `ultimo_batimento` | string | ISO 8601 datetime        | Última vez que o robô respondeu |
 
 ---
 
 ### 2. `GET /trading_bot/api/api_leituras.asp` — Leituras de Mercado
 
-Retorna array com as últimas leituras do mercado, ordenadas do mais recente para o mais antigo. O front exibe as **50 primeiras**.
-
-Atualização a cada **10 segundos**.
-
-**Resposta JSON:**
+Atualização a cada **10 segundos**. Exibe as **50 primeiras** (mais recentes no topo).
 
 ```json
 [
@@ -60,28 +64,23 @@ Atualização a cada **10 segundos**.
     "mm7": 141.8900,
     "mm40": 140.2100,
     "estado": "COMPRADO"
-  },
-  {
-    "data_hora": "2026-03-02 14:29:00",
-    "preco": 142.1200,
-    "mm7": 141.7500,
-    "mm40": 140.1800,
-    "estado": "COMPRADO"
   }
 ]
 ```
 
-| Campo      | Tipo    | Descrição                          |
-|------------|---------|------------------------------------|
-| `data_hora`| string  | Data e hora da leitura             |
-| `preco`    | number  | Preço atual de SOL/USDT            |
-| `mm7`      | number  | Média Móvel de 7 períodos          |
-| `mm40`     | number  | Média Móvel de 40 períodos         |
-| `estado`   | string  | Estado naquele momento (COMPRADO/VENDIDO) |
+| Campo      | Tipo   | Descrição                              |
+|------------|--------|----------------------------------------|
+| `data_hora`| string | Data e hora da leitura                 |
+| `preco`    | number | Preço atual de SOL/USDT                |
+| `mm7`      | number | Média Móvel de 7 períodos              |
+| `mm40`     | number | Média Móvel de 40 períodos             |
+| `estado`   | string | Estado naquele momento (COMPRADO/VENDIDO) |
 
 ---
 
-### 3. `GET /trading_bot/api/api_operacoes.asp` — Operações Realizadas (existente)
+### 3. `GET /trading_bot/api/api_operacoes.asp` — Operações Realizadas
+
+Atualização a cada **15 segundos**.
 
 ```json
 [
@@ -99,7 +98,9 @@ Atualização a cada **10 segundos**.
 
 ---
 
-### 4. `GET /trading_bot/api/api_trades.asp` — Trades Abertos (existente)
+### 4. `GET /trading_bot/api/api_trades.asp` — Trades Abertos
+
+Atualização a cada **10 segundos**.
 
 ```json
 [
@@ -117,7 +118,9 @@ Atualização a cada **10 segundos**.
 
 ---
 
-### 5. `GET /trading_bot/api/api_lucros.asp` — Lucros Diários (existente)
+### 5. `GET /trading_bot/api/api_lucros.asp` — Lucros Diários
+
+Atualização a cada **30 segundos**.
 
 ```json
 [
@@ -131,16 +134,62 @@ Atualização a cada **10 segundos**.
 
 ---
 
+### 6. `GET /trading_bot/api/api_config.asp?symbol=SOLUSDT` — Configuração do Robô
+
+Retorna a configuração atual do par selecionado.
+
+```json
+{
+  "id": 1,
+  "symbol": "SOLUSDT",
+  "candle_duplo_compra_ativo": true,
+  "candle_duplo_venda_ativo": false,
+  "intrabar_compra_ativo": true,
+  "intrabar_venda_ativo": false,
+  "intrabar_percentual_compra": 0.0050,
+  "intrabar_percentual_venda": 0.0030,
+  "valor_operacao": 100.00,
+  "bot_ativo": true,
+  "updated_at": "2026-03-02T14:30:15"
+}
+```
+
+---
+
+### 7. `POST /trading_bot/api/api_config_save.asp` — Salvar Configuração
+
+Recebe JSON com a configuração atualizada. Atualiza ou insere (upsert por `symbol`).
+
+**Request body:**
+
+```json
+{
+  "symbol": "SOLUSDT",
+  "candle_duplo_compra_ativo": true,
+  "candle_duplo_venda_ativo": false,
+  "intrabar_compra_ativo": true,
+  "intrabar_venda_ativo": false,
+  "intrabar_percentual_compra": 0.0050,
+  "intrabar_percentual_venda": 0.0030,
+  "valor_operacao": 100.00,
+  "bot_ativo": true
+}
+```
+
+**Response:** Retorna o registro atualizado (mesmo formato do GET).
+
+---
+
 ## Banco de Dados (Backend)
 
 ### Tabela `tb_status_robo`
 
-| Coluna             | Tipo         | Descrição                        |
-|--------------------|--------------|----------------------------------|
-| `id`               | INT (PK)     | Identificador                    |
-| `status`           | VARCHAR(20)  | OPERANTE / INOPERANTE            |
-| `estado`           | VARCHAR(20)  | COMPRADO / VENDIDO               |
-| `ultimo_batimento` | DATETIME     | Timestamp do último heartbeat    |
+| Coluna             | Tipo         | Descrição                     |
+|--------------------|--------------|-------------------------------|
+| `id`               | INT (PK)     | Identificador                 |
+| `status`           | VARCHAR(20)  | OPERANTE / INOPERANTE         |
+| `estado`           | VARCHAR(20)  | COMPRADO / VENDIDO            |
+| `ultimo_batimento` | DATETIME     | Timestamp do último heartbeat |
 
 > Registro único, sempre atualizado pelo robô.
 
@@ -148,65 +197,93 @@ Atualização a cada **10 segundos**.
 
 ### Tabela `tb_leituras`
 
-| Coluna      | Tipo          | Descrição                              |
-|-------------|---------------|----------------------------------------|
-| `id`        | INT (PK, AI)  | Identificador auto-incremento          |
-| `data_hora` | DATETIME      | Momento da leitura                     |
-| `preco`     | DECIMAL(12,4) | Preço SOL/USDT                         |
-| `mm7`       | DECIMAL(12,4) | Média Móvel 7                          |
-| `mm40`      | DECIMAL(12,4) | Média Móvel 40                         |
-| `estado`    | VARCHAR(20)   | COMPRADO / VENDIDO                     |
-
-> Inserção contínua pelo robô. API retorna `ORDER BY data_hora DESC`.
+| Coluna      | Tipo          | Descrição                     |
+|-------------|---------------|-------------------------------|
+| `id`        | INT (PK, AI)  | Identificador auto-incremento |
+| `data_hora` | DATETIME      | Momento da leitura            |
+| `preco`     | DECIMAL(12,4) | Preço SOL/USDT                |
+| `mm7`       | DECIMAL(12,4) | Média Móvel 7                 |
+| `mm40`      | DECIMAL(12,4) | Média Móvel 40                |
+| `estado`    | VARCHAR(20)   | COMPRADO / VENDIDO            |
 
 ---
 
-### Tabela `tb_operacoes` (existente)
+### Tabela `tb_operacoes`
 
-| Coluna       | Tipo          | Descrição                  |
-|--------------|---------------|----------------------------|
-| `id`         | INT (PK, AI)  | Identificador              |
-| `data`       | DATE          | Data da operação           |
-| `ativo`      | VARCHAR(20)   | Par negociado              |
-| `tipo`       | VARCHAR(10)   | COMPRA / VENDA             |
-| `entrada`    | DECIMAL(12,4) | Preço de entrada           |
-| `saida`      | DECIMAL(12,4) | Preço de saída             |
-| `lucro`      | DECIMAL(12,4) | Resultado da operação      |
-| `estrategia` | VARCHAR(50)   | Estratégia utilizada       |
-
----
-
-### Tabela `tb_trades` (existente)
-
-| Coluna       | Tipo          | Descrição                  |
-|--------------|---------------|----------------------------|
-| `id`         | INT (PK, AI)  | Identificador              |
-| `ativo`      | VARCHAR(20)   | Par negociado              |
-| `tipo`       | VARCHAR(10)   | COMPRA / VENDA             |
-| `entrada`    | DECIMAL(12,4) | Preço de entrada           |
-| `quantidade` | INT           | Quantidade                 |
-| `preco_atual`| DECIMAL(12,4) | Preço atual                |
-| `lucro_aberto`| DECIMAL(12,4)| Lucro não realizado        |
-| `estrategia` | VARCHAR(50)   | Estratégia utilizada       |
+| Coluna       | Tipo          | Descrição            |
+|--------------|---------------|----------------------|
+| `id`         | INT (PK, AI)  | Identificador        |
+| `data`       | DATE          | Data da operação     |
+| `ativo`      | VARCHAR(20)   | Par negociado        |
+| `tipo`       | VARCHAR(10)   | COMPRA / VENDA       |
+| `entrada`    | DECIMAL(12,4) | Preço de entrada     |
+| `saida`      | DECIMAL(12,4) | Preço de saída       |
+| `lucro`      | DECIMAL(12,4) | Resultado             |
+| `estrategia` | VARCHAR(50)   | Estratégia utilizada |
 
 ---
 
-### Tabela `tb_lucros` (existente)
+### Tabela `tb_trades`
 
-| Coluna     | Tipo          | Descrição                  |
-|------------|---------------|----------------------------|
-| `id`       | INT (PK, AI)  | Identificador              |
-| `data`     | DATE          | Dia                        |
-| `lucro`    | DECIMAL(12,4) | Lucro do dia               |
-| `operacoes`| INT           | Qtd de operações no dia    |
+| Coluna        | Tipo          | Descrição            |
+|---------------|---------------|----------------------|
+| `id`          | INT (PK, AI)  | Identificador        |
+| `ativo`       | VARCHAR(20)   | Par negociado        |
+| `tipo`        | VARCHAR(10)   | COMPRA / VENDA       |
+| `entrada`     | DECIMAL(12,4) | Preço de entrada     |
+| `quantidade`  | INT           | Quantidade           |
+| `preco_atual` | DECIMAL(12,4) | Preço atual          |
+| `lucro_aberto`| DECIMAL(12,4) | Lucro não realizado  |
+| `estrategia`  | VARCHAR(50)   | Estratégia utilizada |
 
 ---
 
-## Credenciais de Login (fixas no front)
+### Tabela `tb_lucros`
 
-| Usuário | Senha      |
-|---------|------------|
-| `admin` | `admin123` |
+| Coluna     | Tipo          | Descrição              |
+|------------|---------------|------------------------|
+| `id`       | INT (PK, AI)  | Identificador          |
+| `data`     | DATE          | Dia                    |
+| `lucro`    | DECIMAL(12,4) | Lucro do dia           |
+| `operacoes`| INT           | Qtd de operações no dia|
+
+---
+
+### Tabela `bot_config` *(NOVA)*
+
+| Coluna                       | Tipo          | Descrição                          |
+|------------------------------|---------------|------------------------------------|
+| `id`                         | INT (PK, AI)  | Identificador                      |
+| `symbol`                     | VARCHAR(20)   | Par (SOLUSDT, ETHUSDT) — UNIQUE    |
+| `candle_duplo_compra_ativo`  | BIT           | Estratégia candle duplo compra     |
+| `candle_duplo_venda_ativo`   | BIT           | Estratégia candle duplo venda      |
+| `intrabar_compra_ativo`      | BIT           | Estratégia intrabar compra         |
+| `intrabar_venda_ativo`       | BIT           | Estratégia intrabar venda          |
+| `intrabar_percentual_compra` | DECIMAL(5,4)  | % intrabar compra (ex: 0.0050)     |
+| `intrabar_percentual_venda`  | DECIMAL(5,4)  | % intrabar venda (ex: 0.0030)      |
+| `valor_operacao`             | DECIMAL(10,2) | Valor por operação em USDT         |
+| `bot_ativo`                  | BIT           | Start (1) / Pause (0)             |
+| `updated_at`                 | DATETIME      | Auto-atualizado ao salvar          |
+
+> Cada `symbol` possui apenas um registro (constraint UNIQUE).
+
+**SQL de criação:**
+
+```sql
+CREATE TABLE bot_config (
+  id INT IDENTITY(1,1) PRIMARY KEY,
+  symbol VARCHAR(20) NOT NULL UNIQUE,
+  candle_duplo_compra_ativo BIT DEFAULT 0,
+  candle_duplo_venda_ativo BIT DEFAULT 0,
+  intrabar_compra_ativo BIT DEFAULT 0,
+  intrabar_venda_ativo BIT DEFAULT 0,
+  intrabar_percentual_compra DECIMAL(5,4) DEFAULT 0,
+  intrabar_percentual_venda DECIMAL(5,4) DEFAULT 0,
+  valor_operacao DECIMAL(10,2) DEFAULT 0,
+  bot_ativo BIT DEFAULT 0,
+  updated_at DATETIME DEFAULT GETDATE()
+);
+```
 
 ---
 
@@ -219,6 +296,8 @@ Atualização a cada **10 segundos**.
 | `/trading_bot/api/api_operacoes.asp`  | 15s       |
 | `/trading_bot/api/api_trades.asp`     | 10s       |
 | `/trading_bot/api/api_lucros.asp`     | 30s       |
+| `/trading_bot/api/api_config.asp`     | sob demanda |
+| `/trading_bot/api/api_config_save.asp`| sob demanda |
 
 ---
 

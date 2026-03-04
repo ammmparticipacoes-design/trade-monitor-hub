@@ -8,8 +8,8 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
-const FIXED_USER = "admin";
-const FIXED_PASS = "admin123";
+const FIXED_USER = "Alessandro";
+const FIXED_PASS = "Ale@1970";
 const SESSION_KEY = "trade_bot_session";
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
