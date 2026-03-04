@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import { BarChart3, LogOut, TrendingUp, List } from "lucide-react";
+import { BarChart3, LogOut, TrendingUp, List, Settings } from "lucide-react";
 
 const AppLayout = ({ children }: { children: React.ReactNode }) => {
   const { logout } = useAuth();
@@ -54,6 +54,19 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
               <span className="flex items-center gap-1.5">
                 <TrendingUp className="h-3.5 w-3.5" />
                 Lucros
+              </span>
+            </Link>
+            <Link
+              to="/configuracao"
+              className={`px-3 py-1.5 rounded-md text-sm transition-colors ${
+                isActive("/configuracao")
+                  ? "bg-primary/20 text-header-foreground"
+                  : "text-header-foreground/70 hover:text-header-foreground hover:bg-primary/10"
+              }`}
+            >
+              <span className="flex items-center gap-1.5">
+                <Settings className="h-3.5 w-3.5" />
+                Configuração
               </span>
             </Link>
             <button
