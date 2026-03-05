@@ -13,6 +13,7 @@ export interface RobotStatus {
   estado: "COMPRADO" | "VENDIDO";
   ultimo_batimento: string; // ISO datetime
   ip: string;
+  ip_anterior: string;
   [key: string]: unknown;
 }
 

@@ -89,11 +89,11 @@ const RobotStatusCard = () => {
         </div>
 
         {/* Endereço IP */}
-        {data.ip && (
-          <div className="flex-1 min-w-0">
-            <p className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">Endereço IP</p>
-            <div className="flex items-center gap-2">
-              <p className="text-lg font-semibold text-foreground">{data.ip}</p>
+        <div className="flex-1 min-w-0">
+          <p className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">Endereço IP</p>
+          <div className="flex items-center gap-2">
+            <p className="text-lg font-semibold text-foreground">{data.ip || "—"}</p>
+            {data.ip && (
               <button
                 onClick={() => {
                   navigator.clipboard.writeText(data.ip);
@@ -104,9 +104,15 @@ const RobotStatusCard = () => {
               >
                 <Copy className="h-4 w-4" />
               </button>
-            </div>
+            )}
           </div>
-        )}
+        </div>
+
+        {/* IP Anterior */}
+        <div className="flex-1 min-w-0">
+          <p className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">IP Anterior</p>
+          <p className="text-lg font-semibold text-foreground">{data.ip_anterior || "—"}</p>
+        </div>
       </div>
     </div>
   );
