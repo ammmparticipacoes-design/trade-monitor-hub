@@ -40,15 +40,19 @@ Atualização a cada **5 segundos**.
 {
   "status": "OPERANTE",
   "estado": "COMPRADO",
-  "ultimo_batimento": "2026-03-02T14:30:15"
+  "ultimo_batimento": "2026-03-02T14:30:15",
+  "ip": "189.40.72.15",
+  "ip_anterior": "189.40.70.200"
 }
 ```
 
-| Campo              | Tipo   | Valores possíveis        | Descrição                       |
-|--------------------|--------|--------------------------|---------------------------------|
-| `status`           | string | `OPERANTE`, `INOPERANTE` | Se o robô está ativo            |
-| `estado`           | string | `COMPRADO`, `VENDIDO`    | Posição atual do robô           |
-| `ultimo_batimento` | string | ISO 8601 datetime        | Última vez que o robô respondeu |
+| Campo              | Tipo   | Valores possíveis        | Descrição                                  |
+|--------------------|--------|--------------------------|--------------------------------------------|
+| `status`           | string | `OPERANTE`, `INOPERANTE` | Se o robô está ativo                       |
+| `estado`           | string | `COMPRADO`, `VENDIDO`    | Posição atual do robô                      |
+| `ultimo_batimento` | string | ISO 8601 datetime        | Última vez que o robô respondeu            |
+| `ip`               | string | Endereço IPv4            | IP atual da máquina do robô (com botão copiar) |
+| `ip_anterior`      | string | Endereço IPv4            | IP anterior para comparação visual         |
 
 ---
 
@@ -190,6 +194,8 @@ Recebe JSON com a configuração atualizada. Atualiza ou insere (upsert por `sym
 | `status`           | VARCHAR(20)  | OPERANTE / INOPERANTE         |
 | `estado`           | VARCHAR(20)  | COMPRADO / VENDIDO            |
 | `ultimo_batimento` | DATETIME     | Timestamp do último heartbeat |
+| `ip`               | VARCHAR(45)  | IP atual da máquina do robô   |
+| `ip_anterior`      | VARCHAR(45)  | IP anterior para comparação   |
 
 > Registro único, sempre atualizado pelo robô.
 
