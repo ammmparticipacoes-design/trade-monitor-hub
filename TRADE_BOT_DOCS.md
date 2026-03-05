@@ -16,6 +16,7 @@ Sistema front-end para monitoramento em tempo real de um robô de trading (SOL/U
 |----------------------------------|-------------------------------------------------|
 | `/trading_bot/login`             | Formulário de login                             |
 | `/trading_bot/`                  | Dashboard — status do robô + leituras de mercado|
+| `/trading_bot/monitoramento`     | Monitoramento de pares SOLUSDT vs SOLUSDC       |
 | `/trading_bot/operacoes`         | Operações realizadas                            |
 | `/trading_bot/lucros`            | Lucro diário acumulado                          |
 | `/trading_bot/configuracao`      | Configuração remota do robô                     |
@@ -138,7 +139,45 @@ Atualização a cada **30 segundos**.
 
 ---
 
-### 6. `GET /trading_bot/api/api_config.asp?symbol=SOLUSDT` — Configuração do Robô
+### 6. `GET /trading_bot/api/api_monitor.asp` — Monitoramento de Pares
+
+Atualização a cada **30 segundos**. Retorna registros de monitoramento dos pares SOLUSDT e SOLUSDC.
+
+```json
+[
+  {
+    "data_hora": "2026-03-05T14:30:00",
+    "simbolo": "SOLUSDT",
+    "preco": 142.5312,
+    "bid": 142.5200,
+    "ask": 142.5400,
+    "spread_percent": 0.0140,
+    "range_percent": 0.3200,
+    "volume": 125000,
+    "taxa_percent": 0.0750
+  }
+]
+```
+
+| Campo            | Tipo   | Descrição                                |
+|------------------|--------|------------------------------------------|
+| `data_hora`      | string | Timestamp da leitura                     |
+| `simbolo`        | string | Par monitorado (`SOLUSDT` ou `SOLUSDC`)  |
+| `preco`          | number | Último preço                             |
+| `bid`            | number | Melhor bid                               |
+| `ask`            | number | Melhor ask                               |
+| `spread_percent` | number | Spread em %                              |
+| `range_percent`  | number | Range do candle em %                     |
+| `volume`         | number | Volume negociado                         |
+| `taxa_percent`   | number | Taxa em %                                |
+
+> **Custo total estimado** = `spread_percent + taxa_percent` (calculado no front-end).
+
+> **Destaques visuais:** par com menor custo total → verde; par com maior spread → vermelho.
+
+---
+
+### 7. `GET /trading_bot/api/api_config.asp?symbol=SOLUSDT` — Configuração do Robô
 
 Retorna a configuração atual do par selecionado.
 
@@ -295,13 +334,14 @@ CREATE TABLE bot_config (
 
 ## Intervalos de Atualização
 
-| Endpoint                              | Intervalo |
-|---------------------------------------|-----------|
-| `/trading_bot/api/api_status.asp`     | 5s        |
-| `/trading_bot/api/api_leituras.asp`   | 10s       |
-| `/trading_bot/api/api_operacoes.asp`  | 15s       |
-| `/trading_bot/api/api_trades.asp`     | 10s       |
-| `/trading_bot/api/api_lucros.asp`     | 30s       |
+| Endpoint                              | Intervalo   |
+|---------------------------------------|-------------|
+| `/trading_bot/api/api_status.asp`     | 5s          |
+| `/trading_bot/api/api_leituras.asp`   | 10s         |
+| `/trading_bot/api/api_operacoes.asp`  | 15s         |
+| `/trading_bot/api/api_trades.asp`     | 10s         |
+| `/trading_bot/api/api_lucros.asp`     | 30s         |
+| `/trading_bot/api/api_monitor.asp`    | 30s         |
 | `/trading_bot/api/api_config.asp`     | sob demanda |
 | `/trading_bot/api/api_config_save.asp`| sob demanda |
 
