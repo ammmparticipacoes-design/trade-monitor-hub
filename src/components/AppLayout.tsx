@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import { BarChart3, LogOut, TrendingUp, List, Settings, Menu, X } from "lucide-react";
+import { BarChart3, LogOut, TrendingUp, List, Settings, Menu, X, Activity } from "lucide-react";
 
 const navItems = [
   { to: "/", label: "Painel", icon: BarChart3 },
+  { to: "/monitoramento", label: "Monitoramento", icon: Activity },
   { to: "/operacoes", label: "Operações", icon: List },
   { to: "/lucros", label: "Lucros", icon: TrendingUp },
   { to: "/configuracao", label: "Configuração", icon: Settings },

@@ -10,6 +10,7 @@ import Dashboard from "@/pages/Dashboard";
 import Lucros from "@/pages/Lucros";
 import Operacoes from "@/pages/Operacoes";
 import Configuracao from "@/pages/Configuracao";
+import Monitoramento from "@/pages/Monitoramento";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -52,6 +53,14 @@ const App = () => (
               element={
                 <ProtectedRoute>
                   <Configuracao />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/monitoramento"
+              element={
+                <ProtectedRoute>
+                  <Monitoramento />
                 </ProtectedRoute>
               }
             />
