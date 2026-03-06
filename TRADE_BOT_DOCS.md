@@ -362,6 +362,51 @@ CREATE TABLE bot_config (
 
 ---
 
+## Providências Backend (Pendentes)
+
+Alterações necessárias no backend para suportar as novas funcionalidades do front-end:
+
+### 1. Tabela `tb_status_robo` — Novo campo `nome_robo`
+
+```sql
+ALTER TABLE tb_status_robo ADD nome_robo VARCHAR(100) NULL;
+```
+
+- A API `api_status.asp` deve retornar o campo `nome_robo` no JSON.
+- O front-end exibe o nome no card de status; se ausente, exibe "Robô" como fallback.
+
+### 2. Tabela `bot_config` — Novos campos Mean Reversão
+
+```sql
+ALTER TABLE bot_config ADD mean_reversao_ativo BIT DEFAULT 0;
+ALTER TABLE bot_config ADD mean_reversao_percentual_entrada DECIMAL(5,2) DEFAULT 0;
+ALTER TABLE bot_config ADD mean_reversao_percentual_alvo DECIMAL(5,2) DEFAULT 0;
+```
+
+- A API `api_config.asp` deve retornar os 3 novos campos no JSON.
+- A API `api_config_save.asp` deve aceitar e persistir os 3 novos campos.
+
+### 3. Leituras de Mercado — Coluna "Parâmetros"
+
+- **Sem alteração no backend.** A API continua retornando `mm7` e `mm40` separadamente.
+- O front-end agora unifica as duas colunas em uma única coluna "Parâmetros" exibindo `MM7: x | MM40: y`.
+
+---
+
+## Changelog
+
+| Data       | Alteração                                                                 |
+|------------|---------------------------------------------------------------------------|
+| 2026-03-06 | Adicionado campo `nome_robo` na API status e card de status               |
+| 2026-03-06 | Colunas MM7 e MM40 unificadas em "Parâmetros" na tabela de leituras       |
+| 2026-03-06 | Adicionada estratégia Mean Reversão (checkbox + 2 campos de percentual)   |
+| 2026-03-06 | Novos campos `mean_reversao_*` na tabela `bot_config` e APIs de config    |
+| 2026-03-05 | Campos `ip` e `ip_anterior` adicionados à API status e card               |
+| 2026-03-05 | Criada aba Monitoramento com comparação SOLUSDT vs SOLUSDC                |
+| 2026-03-04 | Criada página de Configuração do Robô com API de leitura e salvamento     |
+
+---
+
 ## Stack Front-end
 
 - React 18 + TypeScript
@@ -370,3 +415,4 @@ CREATE TABLE bot_config (
 - shadcn/ui
 - TanStack React Query
 - Lucide Icons
+- Recharts (gráficos)
