@@ -60,7 +60,7 @@ const LeiturasTable = () => {
                 {formatNum(row.preco)}
               </td>
               <td className="px-4 py-2.5 whitespace-nowrap text-foreground font-mono text-xs">
-                MM7: {formatNum(row.mm7)} | MM40: {formatNum(row.mm40)}
+                {row.parametros ?? "—"}
               </td>
               <td className="px-4 py-2.5 whitespace-nowrap">
                 <span

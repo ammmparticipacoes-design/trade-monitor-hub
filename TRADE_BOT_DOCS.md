@@ -68,20 +68,19 @@ Atualização a cada **10 segundos**. Exibe as **50 primeiras** (mais recentes n
   {
     "data_hora": "2026-03-02 14:30:00",
     "preco": 142.5312,
-    "mm7": 141.8900,
-    "mm40": 140.2100,
+    "parametros": "MM7: 141.8900 | MM40: 140.2100",
     "estado": "COMPRADO"
   }
 ]
 ```
 
-| Campo      | Tipo   | Descrição                              |
-|------------|--------|----------------------------------------|
-| `data_hora`| string | Data e hora da leitura                 |
-| `preco`    | number | Preço atual de SOL/USDT                |
-| `mm7`      | number | Média Móvel de 7 períodos              |
-| `mm40`     | number | Média Móvel de 40 períodos             |
-| `estado`   | string | Estado naquele momento (COMPRADO/VENDIDO) |
+| Campo       | Tipo   | Descrição                                        |
+|-------------|--------|--------------------------------------------------|
+| `data_hora` | string | Data e hora da leitura                           |
+| `preco`     | number | Preço atual de SOL/USDT                          |
+| `parametros`| string | Texto livre com parâmetros formatados pela API   |
+| `estado`    | string | Estado naquele momento (COMPRADO/VENDIDO)        |
+
 
 ---
 
@@ -251,14 +250,13 @@ Recebe JSON com a configuração atualizada. Atualiza ou insere (upsert por `sym
 
 ### Tabela `tb_leituras`
 
-| Coluna      | Tipo          | Descrição                     |
-|-------------|---------------|-------------------------------|
-| `id`        | INT (PK, AI)  | Identificador auto-incremento |
-| `data_hora` | DATETIME      | Momento da leitura            |
-| `preco`     | DECIMAL(12,4) | Preço SOL/USDT                |
-| `mm7`       | DECIMAL(12,4) | Média Móvel 7                 |
-| `mm40`      | DECIMAL(12,4) | Média Móvel 40                |
-| `estado`    | VARCHAR(20)   | COMPRADO / VENDIDO            |
+| Coluna       | Tipo          | Descrição                              |
+|--------------|---------------|----------------------------------------|
+| `id`         | INT (PK, AI)  | Identificador auto-incremento          |
+| `data_hora`  | DATETIME      | Momento da leitura                     |
+| `preco`      | DECIMAL(12,4) | Preço SOL/USDT                         |
+| `parametros` | VARCHAR(200)  | Parâmetros formatados (texto livre)    |
+| `estado`     | VARCHAR(20)   | COMPRADO / VENDIDO                     |
 
 ---
 
@@ -386,10 +384,16 @@ ALTER TABLE bot_config ADD mean_reversao_percentual_alvo DECIMAL(5,2) DEFAULT 0;
 - A API `api_config.asp` deve retornar os 3 novos campos no JSON.
 - A API `api_config_save.asp` deve aceitar e persistir os 3 novos campos.
 
-### 3. Leituras de Mercado — Coluna "Parâmetros"
+### 3. Tabela `tb_leituras` — Substituir `mm7` e `mm40` por `parametros`
 
-- **Sem alteração no backend.** A API continua retornando `mm7` e `mm40` separadamente.
-- O front-end agora unifica as duas colunas em uma única coluna "Parâmetros" exibindo `MM7: x | MM40: y`.
+```sql
+ALTER TABLE tb_leituras DROP COLUMN mm7;
+ALTER TABLE tb_leituras DROP COLUMN mm40;
+ALTER TABLE tb_leituras ADD parametros VARCHAR(200) NULL;
+```
+
+- A API `api_leituras.asp` deve retornar o campo `parametros` (texto já formatado) em vez de `mm7` e `mm40`.
+- O front-end exibe o conteúdo de `parametros` diretamente, sem formatação adicional.
 
 ---
 
@@ -398,7 +402,7 @@ ALTER TABLE bot_config ADD mean_reversao_percentual_alvo DECIMAL(5,2) DEFAULT 0;
 | Data       | Alteração                                                                 |
 |------------|---------------------------------------------------------------------------|
 | 2026-03-06 | Adicionado campo `nome_robo` na API status e card de status               |
-| 2026-03-06 | Colunas MM7 e MM40 unificadas em "Parâmetros" na tabela de leituras       |
+| 2026-03-06 | Campo `parametros` substitui `mm7`/`mm40` na API leituras e tabela       |
 | 2026-03-06 | Adicionada estratégia Mean Reversão (checkbox + 2 campos de percentual)   |
 | 2026-03-06 | Novos campos `mean_reversao_*` na tabela `bot_config` e APIs de config    |
 | 2026-03-05 | Campos `ip` e `ip_anterior` adicionados à API status e card               |

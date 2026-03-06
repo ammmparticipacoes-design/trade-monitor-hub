@@ -21,8 +21,7 @@ export interface RobotStatus {
 export interface LeituraMercado {
   data_hora: string;
   preco: number;
-  mm7: number;
-  mm40: number;
+  parametros: string;
   estado: "COMPRADO" | "VENDIDO";
   [key: string]: unknown;
 }
