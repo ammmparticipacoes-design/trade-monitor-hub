@@ -27,6 +27,9 @@ const Configuracao = () => {
     intrabar_venda_ativo: false,
     intrabar_percentual_compra: 0,
     intrabar_percentual_venda: 0,
+    mean_reversao_ativo: false,
+    mean_reversao_percentual_entrada: 0,
+    mean_reversao_percentual_alvo: 0,
     valor_operacao: 0,
     bot_ativo: false,
   });
@@ -121,6 +124,7 @@ const Configuracao = () => {
                   ["candle_duplo_venda_ativo", "Candle Duplo Venda"],
                   ["intrabar_compra_ativo", "Intrabar Compra"],
                   ["intrabar_venda_ativo", "Intrabar Venda"],
+                  ["mean_reversao_ativo", "Mean Reversão"],
                 ] as const).map(([field, label]) => (
                   <div key={field} className="flex items-center gap-2">
                     <Checkbox
@@ -162,6 +166,41 @@ const Configuracao = () => {
                     value={form.intrabar_percentual_venda || ""}
                     onChange={handleNumber("intrabar_percentual_venda")}
                     placeholder="0.0000"
+                  />
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Parâmetros Mean Reversão */}
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-sm">Parâmetros Mean Reversão</CardTitle>
+              </CardHeader>
+              <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <Label htmlFor="mr_entrada" className="text-xs text-muted-foreground">Percentual Entrada no Range (%)</Label>
+                  <Input
+                    id="mr_entrada"
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    value={form.mean_reversao_percentual_entrada || ""}
+                    onChange={handleNumber("mean_reversao_percentual_entrada")}
+                    placeholder="0.00"
+                    disabled={!form.mean_reversao_ativo}
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="mr_alvo" className="text-xs text-muted-foreground">Percentual Preço Alvo (%)</Label>
+                  <Input
+                    id="mr_alvo"
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    value={form.mean_reversao_percentual_alvo || ""}
+                    onChange={handleNumber("mean_reversao_percentual_alvo")}
+                    placeholder="0.00"
+                    disabled={!form.mean_reversao_ativo}
                   />
                 </div>
               </CardContent>

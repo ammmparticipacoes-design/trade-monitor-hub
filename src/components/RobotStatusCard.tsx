@@ -54,7 +54,7 @@ const RobotStatusCard = () => {
       }`}
     >
       <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-        {/* Status principal */}
+        {/* Nome + Status principal */}
         <div className="flex items-center gap-3 flex-1 min-w-0">
           {isOperante ? (
             <CheckCircle2 className="h-10 w-10 text-profit shrink-0" />
@@ -62,7 +62,9 @@ const RobotStatusCard = () => {
             <AlertTriangle className="h-10 w-10 text-loss shrink-0" />
           )}
           <div>
-            <p className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">Status do Robô</p>
+            <p className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">
+              {data.nome_robo || "Robô"}
+            </p>
             <p className={`text-2xl font-bold tracking-tight ${isOperante ? "text-profit" : "text-loss"}`}>
               {data.status}
             </p>

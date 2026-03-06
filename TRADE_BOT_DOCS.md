@@ -43,7 +43,8 @@ Atualização a cada **5 segundos**.
   "estado": "COMPRADO",
   "ultimo_batimento": "2026-03-02T14:30:15",
   "ip": "189.40.72.15",
-  "ip_anterior": "189.40.70.200"
+  "ip_anterior": "189.40.70.200",
+  "nome_robo": "SOL Trading Bot v2"
 }
 ```
 
@@ -54,6 +55,7 @@ Atualização a cada **5 segundos**.
 | `ultimo_batimento` | string | ISO 8601 datetime        | Última vez que o robô respondeu            |
 | `ip`               | string | Endereço IPv4            | IP atual da máquina do robô (com botão copiar) |
 | `ip_anterior`      | string | Endereço IPv4            | IP anterior para comparação visual         |
+| `nome_robo`        | string | Texto livre              | Nome do robô em operação (exibido no card) |
 
 ---
 
@@ -191,6 +193,9 @@ Retorna a configuração atual do par selecionado.
   "intrabar_venda_ativo": false,
   "intrabar_percentual_compra": 0.0050,
   "intrabar_percentual_venda": 0.0030,
+  "mean_reversao_ativo": true,
+  "mean_reversao_percentual_entrada": 0.25,
+  "mean_reversao_percentual_alvo": 0.50,
   "valor_operacao": 100.00,
   "bot_ativo": true,
   "updated_at": "2026-03-02T14:30:15"
@@ -199,7 +204,7 @@ Retorna a configuração atual do par selecionado.
 
 ---
 
-### 7. `POST /trading_bot/api/api_config_save.asp` — Salvar Configuração
+### 8. `POST /trading_bot/api/api_config_save.asp` — Salvar Configuração
 
 Recebe JSON com a configuração atualizada. Atualiza ou insere (upsert por `symbol`).
 
@@ -214,6 +219,9 @@ Recebe JSON com a configuração atualizada. Atualiza ou insere (upsert por `sym
   "intrabar_venda_ativo": false,
   "intrabar_percentual_compra": 0.0050,
   "intrabar_percentual_venda": 0.0030,
+  "mean_reversao_ativo": true,
+  "mean_reversao_percentual_entrada": 0.25,
+  "mean_reversao_percentual_alvo": 0.50,
   "valor_operacao": 100.00,
   "bot_ativo": true
 }
@@ -235,6 +243,7 @@ Recebe JSON com a configuração atualizada. Atualiza ou insere (upsert por `sym
 | `ultimo_batimento` | DATETIME     | Timestamp do último heartbeat |
 | `ip`               | VARCHAR(45)  | IP atual da máquina do robô   |
 | `ip_anterior`      | VARCHAR(45)  | IP anterior para comparação   |
+| `nome_robo`        | VARCHAR(100) | Nome do robô em operação      |
 
 > Registro único, sempre atualizado pelo robô.
 
@@ -299,16 +308,19 @@ Recebe JSON com a configuração atualizada. Atualiza ou insere (upsert por `sym
 | Coluna                       | Tipo          | Descrição                          |
 |------------------------------|---------------|------------------------------------|
 | `id`                         | INT (PK, AI)  | Identificador                      |
-| `symbol`                     | VARCHAR(20)   | Par (SOLUSDT, ETHUSDT) — UNIQUE    |
-| `candle_duplo_compra_ativo`  | BIT           | Estratégia candle duplo compra     |
-| `candle_duplo_venda_ativo`   | BIT           | Estratégia candle duplo venda      |
-| `intrabar_compra_ativo`      | BIT           | Estratégia intrabar compra         |
-| `intrabar_venda_ativo`       | BIT           | Estratégia intrabar venda          |
-| `intrabar_percentual_compra` | DECIMAL(5,4)  | % intrabar compra (ex: 0.0050)     |
-| `intrabar_percentual_venda`  | DECIMAL(5,4)  | % intrabar venda (ex: 0.0030)      |
-| `valor_operacao`             | DECIMAL(10,2) | Valor por operação em USDT         |
-| `bot_ativo`                  | BIT           | Start (1) / Pause (0)             |
-| `updated_at`                 | DATETIME      | Auto-atualizado ao salvar          |
+| `symbol`                         | VARCHAR(20)   | Par (SOLUSDT, ETHUSDT) — UNIQUE    |
+| `candle_duplo_compra_ativo`      | BIT           | Estratégia candle duplo compra     |
+| `candle_duplo_venda_ativo`       | BIT           | Estratégia candle duplo venda      |
+| `intrabar_compra_ativo`          | BIT           | Estratégia intrabar compra         |
+| `intrabar_venda_ativo`           | BIT           | Estratégia intrabar venda          |
+| `intrabar_percentual_compra`     | DECIMAL(5,4)  | % intrabar compra (ex: 0.0050)     |
+| `intrabar_percentual_venda`      | DECIMAL(5,4)  | % intrabar venda (ex: 0.0030)      |
+| `mean_reversao_ativo`            | BIT           | Estratégia Mean Reversão           |
+| `mean_reversao_percentual_entrada` | DECIMAL(5,2) | % entrada no range               |
+| `mean_reversao_percentual_alvo`  | DECIMAL(5,2)  | % preço alvo                       |
+| `valor_operacao`                 | DECIMAL(10,2) | Valor por operação em USDT         |
+| `bot_ativo`                      | BIT           | Start (1) / Pause (0)             |
+| `updated_at`                     | DATETIME      | Auto-atualizado ao salvar          |
 
 > Cada `symbol` possui apenas um registro (constraint UNIQUE).
 
@@ -324,6 +336,9 @@ CREATE TABLE bot_config (
   intrabar_venda_ativo BIT DEFAULT 0,
   intrabar_percentual_compra DECIMAL(5,4) DEFAULT 0,
   intrabar_percentual_venda DECIMAL(5,4) DEFAULT 0,
+  mean_reversao_ativo BIT DEFAULT 0,
+  mean_reversao_percentual_entrada DECIMAL(5,2) DEFAULT 0,
+  mean_reversao_percentual_alvo DECIMAL(5,2) DEFAULT 0,
   valor_operacao DECIMAL(10,2) DEFAULT 0,
   bot_ativo BIT DEFAULT 0,
   updated_at DATETIME DEFAULT GETDATE()
