@@ -14,6 +14,7 @@ export interface RobotStatus {
   ultimo_batimento: string; // ISO datetime
   ip: string;
   ip_anterior: string;
+  nome_robo: string;
   [key: string]: unknown;
 }
 

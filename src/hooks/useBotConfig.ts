@@ -11,6 +11,9 @@ export interface BotConfig {
   intrabar_venda_ativo: boolean;
   intrabar_percentual_compra: number;
   intrabar_percentual_venda: number;
+  mean_reversao_ativo: boolean;
+  mean_reversao_percentual_entrada: number;
+  mean_reversao_percentual_alvo: number;
   valor_operacao: number;
   bot_ativo: boolean;
   updated_at?: string;
@@ -24,6 +27,9 @@ const defaultConfig: BotConfig = {
   intrabar_venda_ativo: false,
   intrabar_percentual_compra: 0,
   intrabar_percentual_venda: 0,
+  mean_reversao_ativo: false,
+  mean_reversao_percentual_entrada: 0,
+  mean_reversao_percentual_alvo: 0,
   valor_operacao: 0,
   bot_ativo: false,
 };

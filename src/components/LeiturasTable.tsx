@@ -40,7 +40,7 @@ const LeiturasTable = () => {
       <table className="w-full text-sm">
         <thead>
           <tr className="bg-table-header">
-            {["Data/Hora", "Preço (SOL/USDT)", "MM 7", "MM 40", "Estado"].map((h) => (
+            {["Data/Hora", "Preço (SOL/USDT)", "Parâmetros", "Estado"].map((h) => (
               <th
                 key={h}
                 className="px-4 py-2.5 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider whitespace-nowrap"
@@ -59,11 +59,8 @@ const LeiturasTable = () => {
               <td className="px-4 py-2.5 whitespace-nowrap text-foreground font-mono">
                 {formatNum(row.preco)}
               </td>
-              <td className="px-4 py-2.5 whitespace-nowrap text-foreground font-mono">
-                {formatNum(row.mm7)}
-              </td>
-              <td className="px-4 py-2.5 whitespace-nowrap text-foreground font-mono">
-                {formatNum(row.mm40)}
+              <td className="px-4 py-2.5 whitespace-nowrap text-foreground font-mono text-xs">
+                MM7: {formatNum(row.mm7)} | MM40: {formatNum(row.mm40)}
               </td>
               <td className="px-4 py-2.5 whitespace-nowrap">
                 <span
