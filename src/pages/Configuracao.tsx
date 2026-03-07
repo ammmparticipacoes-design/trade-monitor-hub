@@ -30,6 +30,8 @@ const Configuracao = () => {
     mean_reversao_ativo: false,
     mean_reversao_percentual_entrada: 0,
     mean_reversao_percentual_alvo: 0,
+    take_profit_percentual: 0,
+    stop_loss_percentual: 0,
     valor_operacao: 0,
     bot_ativo: false,
   });
