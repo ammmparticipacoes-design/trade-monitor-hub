@@ -208,6 +208,39 @@ const Configuracao = () => {
               </CardContent>
             </Card>
 
+            {/* Take Profit / Stop Loss */}
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-sm">Take Profit / Stop Loss</CardTitle>
+              </CardHeader>
+              <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <Label htmlFor="tp_pct" className="text-xs text-muted-foreground">Percentual Take Profit</Label>
+                  <Input
+                    id="tp_pct"
+                    type="number"
+                    step="0.001"
+                    min="0"
+                    value={form.take_profit_percentual || ""}
+                    onChange={handleNumber("take_profit_percentual")}
+                    placeholder="0.010"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="sl_pct" className="text-xs text-muted-foreground">Percentual Stop Loss</Label>
+                  <Input
+                    id="sl_pct"
+                    type="number"
+                    step="0.001"
+                    min="0"
+                    value={form.stop_loss_percentual || ""}
+                    onChange={handleNumber("stop_loss_percentual")}
+                    placeholder="0.008"
+                  />
+                </div>
+              </CardContent>
+            </Card>
+
             {/* Gestão */}
             <Card>
               <CardHeader className="pb-3">
