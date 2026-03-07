@@ -30,6 +30,8 @@ const Configuracao = () => {
     mean_reversao_ativo: false,
     mean_reversao_percentual_entrada: 0,
     mean_reversao_percentual_alvo: 0,
+    take_profit_percentual: 0,
+    stop_loss_percentual: 0,
     valor_operacao: 0,
     bot_ativo: false,
   });
@@ -201,6 +203,39 @@ const Configuracao = () => {
                     onChange={handleNumber("mean_reversao_percentual_alvo")}
                     placeholder="0.00"
                     disabled={!form.mean_reversao_ativo}
+                  />
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Take Profit / Stop Loss */}
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-sm">Take Profit / Stop Loss</CardTitle>
+              </CardHeader>
+              <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <Label htmlFor="tp_pct" className="text-xs text-muted-foreground">Percentual Take Profit</Label>
+                  <Input
+                    id="tp_pct"
+                    type="number"
+                    step="0.001"
+                    min="0"
+                    value={form.take_profit_percentual || ""}
+                    onChange={handleNumber("take_profit_percentual")}
+                    placeholder="0.010"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="sl_pct" className="text-xs text-muted-foreground">Percentual Stop Loss</Label>
+                  <Input
+                    id="sl_pct"
+                    type="number"
+                    step="0.001"
+                    min="0"
+                    value={form.stop_loss_percentual || ""}
+                    onChange={handleNumber("stop_loss_percentual")}
+                    placeholder="0.008"
                   />
                 </div>
               </CardContent>
