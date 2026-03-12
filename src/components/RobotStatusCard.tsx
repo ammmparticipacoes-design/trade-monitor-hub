@@ -1,4 +1,4 @@
-import { CheckCircle2, AlertTriangle, Loader2, ShoppingCart, TrendingDown, Copy } from "lucide-react";
+import { CheckCircle2, AlertTriangle, Loader2, ShoppingCart, TrendingDown, Copy, RefreshCw } from "lucide-react";
 import { useRobotStatus } from "@/hooks/useRobotApi";
 import { useMemo } from "react";
 import { toast } from "sonner";
