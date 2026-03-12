@@ -207,6 +207,9 @@ Retorna a configuração atual do par selecionado.
   "mean_reversao_ativo": true,
   "mean_reversao_percentual_entrada": 0.25,
   "mean_reversao_percentual_alvo": 0.50,
+  "take_profit_percentual": 0.01,
+  "stop_loss_percentual": 0.008,
+  "considerar_emas": true,
   "valor_operacao": 100.00,
   "bot_ativo": true,
   "updated_at": "2026-03-02T14:30:15"
