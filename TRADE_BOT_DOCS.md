@@ -288,7 +288,8 @@ Recebe JSON com a configuração atualizada. Atualiza ou insere (upsert por `sym
 | `tipo`       | VARCHAR(10)   | COMPRA / VENDA       |
 | `entrada`    | DECIMAL(12,4) | Preço de entrada     |
 | `saida`      | DECIMAL(12,4) | Preço de saída       |
-| `lucro`      | DECIMAL(12,4) | Resultado             |
+| `taxa`       | DECIMAL(12,4) | Taxa da operação     |
+| `lucro`      | DECIMAL(12,4) | Resultado            |
 | `estrategia` | VARCHAR(50)   | Estratégia utilizada |
 
 ---
