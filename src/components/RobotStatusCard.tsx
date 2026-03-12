@@ -1,4 +1,4 @@
-import { CheckCircle2, AlertTriangle, Loader2, ShoppingCart, TrendingDown, Copy } from "lucide-react";
+import { CheckCircle2, AlertTriangle, Loader2, ShoppingCart, TrendingDown, Copy, RefreshCw } from "lucide-react";
 import { useRobotStatus } from "@/hooks/useRobotApi";
 import { useMemo } from "react";
 import { toast } from "sonner";
@@ -113,7 +113,21 @@ const RobotStatusCard = () => {
         {/* IP Anterior */}
         <div className="flex-1 min-w-0">
           <p className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">IP Anterior</p>
-          <p className="text-lg font-semibold text-foreground">{data.ip_anterior || "—"}</p>
+          <div className="flex items-center gap-2">
+            <p className="text-lg font-semibold text-foreground">{data.ip_anterior || "—"}</p>
+            {data.ip && (
+              <button
+                onClick={() => {
+                  fetch("/trading_bot/api/api_unificar_ip.asp", { method: "POST" }).catch(() => {});
+                  toast.success("IP sincronizado!");
+                }}
+                className="p-1.5 rounded-md hover:bg-muted transition-colors text-muted-foreground hover:text-foreground"
+                title="Sincronizar IP atual para IP anterior"
+              >
+                <RefreshCw className="h-4 w-4" />
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>
