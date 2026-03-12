@@ -14,6 +14,7 @@ export interface BotConfig {
   mean_reversao_ativo: boolean;
   mean_reversao_percentual_entrada: number;
   mean_reversao_percentual_alvo: number;
+  considerar_emas: boolean;
   take_profit_percentual: number;
   stop_loss_percentual: number;
   valor_operacao: number;
