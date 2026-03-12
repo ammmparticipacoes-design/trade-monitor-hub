@@ -421,12 +421,46 @@ ALTER TABLE tb_leituras ADD parametros VARCHAR(200) NULL;
 - A API `api_leituras.asp` deve retornar o campo `parametros` (texto já formatado) em vez de `mm7` e `mm40`.
 - O front-end exibe o conteúdo de `parametros` diretamente, sem formatação adicional.
 
+### 4. API `POST /trading_bot/api/api_unificar_ip.asp` — Sincronizar IP
+
+Nova API chamada silenciosamente pelo botão ao lado do "IP Anterior" no card de status. Deve copiar o valor do campo `ip` para `ip_anterior` em `tb_status_robo`.
+
+```sql
+UPDATE tb_status_robo SET ip_anterior = ip WHERE id = 1;
+```
+
+### 5. Tabela `tb_operacoes` — Novo campo `taxa`
+
+```sql
+ALTER TABLE tb_operacoes ADD taxa DECIMAL(12,4) DEFAULT 0;
+```
+
+- A API `api_operacoes.asp` deve retornar o campo `taxa` no JSON.
+- O front-end exibe a coluna "Taxa" entre "Saída" e "Resultado".
+
+### 6. Tabela `bot_config` — Novos campos `take_profit_percentual`, `stop_loss_percentual`, `considerar_emas`
+
+```sql
+ALTER TABLE bot_config ADD take_profit_percentual DECIMAL(5,3) DEFAULT 0;
+ALTER TABLE bot_config ADD stop_loss_percentual DECIMAL(5,3) DEFAULT 0;
+ALTER TABLE bot_config ADD considerar_emas BIT DEFAULT 0;
+```
+
+- A API `api_config.asp` deve retornar os 3 novos campos.
+- A API `api_config_save.asp` deve aceitar e persistir os 3 novos campos.
+
 ---
 
 ## Changelog
 
 | Data       | Alteração                                                                 |
 |------------|---------------------------------------------------------------------------|
+| 2026-03-12 | Título do browser alterado para "Trade Monitor Hub"                       |
+| 2026-03-12 | Botão sincronizar IP anterior (chama `api_unificar_ip.asp`)               |
+| 2026-03-12 | Coluna "Taxa" adicionada na tabela de operações (entre Saída e Resultado) |
+| 2026-03-12 | Coluna "Lucro" renomeada para "Resultado" na tela de operações            |
+| 2026-03-12 | Checkbox "Considerar EMAs no Trade" na tela de configuração               |
+| 2026-03-12 | Campos `take_profit_percentual` e `stop_loss_percentual` na configuração  |
 | 2026-03-06 | Adicionado campo `nome_robo` na API status e card de status               |
 | 2026-03-06 | Campo `parametros` substitui `mm7`/`mm40` na API leituras e tabela       |
 | 2026-03-06 | Adicionada estratégia Mean Reversão (checkbox + 2 campos de percentual)   |
