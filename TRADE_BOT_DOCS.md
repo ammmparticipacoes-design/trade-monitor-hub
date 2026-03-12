@@ -359,6 +359,9 @@ CREATE TABLE bot_config (
   mean_reversao_ativo BIT DEFAULT 0,
   mean_reversao_percentual_entrada DECIMAL(5,2) DEFAULT 0,
   mean_reversao_percentual_alvo DECIMAL(5,2) DEFAULT 0,
+  take_profit_percentual DECIMAL(5,3) DEFAULT 0,
+  stop_loss_percentual DECIMAL(5,3) DEFAULT 0,
+  considerar_emas BIT DEFAULT 0,
   valor_operacao DECIMAL(10,2) DEFAULT 0,
   bot_ativo BIT DEFAULT 0,
   updated_at DATETIME DEFAULT GETDATE()
