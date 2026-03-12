@@ -15,6 +15,7 @@ export interface Operacao {
   tipo?: string;
   entrada?: number;
   saida?: number;
+  taxa?: number;
   lucro?: number;
   resultado?: string;
   estrategia?: string;

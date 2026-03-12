@@ -45,8 +45,13 @@ const Operacoes = () => {
       render: (value: unknown) => formatCurrency(value),
     },
     {
+      key: "taxa",
+      label: "Taxa",
+      render: (value: unknown) => formatCurrency(value),
+    },
+    {
       key: "lucro",
-      label: "Lucro",
+      label: "Resultado",
       render: (value: unknown) => {
         if (typeof value !== "number") return "—";
         const color = value > 0 ? "text-green-500" : value < 0 ? "text-red-500" : "text-muted-foreground";

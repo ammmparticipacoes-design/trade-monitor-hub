@@ -128,6 +128,7 @@ const Configuracao = () => {
                   ["intrabar_compra_ativo", "Intrabar Compra"],
                   ["intrabar_venda_ativo", "Intrabar Venda"],
                   ["mean_reversao_ativo", "Mean Reversão"],
+                  ["considerar_emas", "Considerar EMAs no Trade"],
                 ] as const).map(([field, label]) => (
                   <div key={field} className="flex items-center gap-2">
                     <Checkbox

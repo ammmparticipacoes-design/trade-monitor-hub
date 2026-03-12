@@ -33,6 +33,7 @@ const defaultConfig: BotConfig = {
   mean_reversao_ativo: false,
   mean_reversao_percentual_entrada: 0,
   mean_reversao_percentual_alvo: 0,
+  considerar_emas: false,
   take_profit_percentual: 0,
   stop_loss_percentual: 0,
   valor_operacao: 0,
