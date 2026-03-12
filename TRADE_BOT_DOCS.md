@@ -335,6 +335,9 @@ Recebe JSON com a configuração atualizada. Atualiza ou insere (upsert por `sym
 | `mean_reversao_ativo`            | BIT           | Estratégia Mean Reversão           |
 | `mean_reversao_percentual_entrada` | DECIMAL(5,2) | % entrada no range               |
 | `mean_reversao_percentual_alvo`  | DECIMAL(5,2)  | % preço alvo                       |
+| `take_profit_percentual`             | DECIMAL(5,3)  | % take profit (ex: 0.010)          |
+| `stop_loss_percentual`               | DECIMAL(5,3)  | % stop loss (ex: 0.008)            |
+| `considerar_emas`                    | BIT           | Considerar EMAs no trade           |
 | `valor_operacao`                 | DECIMAL(10,2) | Valor por operação em USDT         |
 | `bot_ativo`                      | BIT           | Start (1) / Pause (0)             |
 | `updated_at`                     | DATETIME      | Auto-atualizado ao salvar          |
