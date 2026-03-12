@@ -382,6 +382,7 @@ CREATE TABLE bot_config (
 | `/trading_bot/api/api_monitor.asp`    | 30s         |
 | `/trading_bot/api/api_config.asp`     | sob demanda |
 | `/trading_bot/api/api_config_save.asp`| sob demanda |
+| `/trading_bot/api/api_unificar_ip.asp`| sob demanda |
 
 ---
 
