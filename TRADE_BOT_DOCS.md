@@ -96,11 +96,23 @@ Atualização a cada **15 segundos**.
     "tipo": "COMPRA",
     "entrada": 140.50,
     "saida": 143.20,
+    "taxa": 0.15,
     "lucro": 2.70,
     "estrategia": "Cruzamento MA"
   }
 ]
 ```
+
+| Campo       | Tipo          | Descrição                                    |
+|-------------|---------------|----------------------------------------------|
+| `data`      | string        | Data da operação                             |
+| `ativo`     | string        | Par negociado                                |
+| `tipo`      | string        | COMPRA / VENDA                               |
+| `entrada`   | number        | Preço de entrada (USDT)                      |
+| `saida`     | number        | Preço de saída (USDT)                        |
+| `taxa`      | number        | Taxa da operação (USDT)                      |
+| `lucro`     | number        | Resultado da operação (exibido como "Resultado" na UI) |
+| `estrategia`| string        | Estratégia utilizada                         |
 
 ---
 
