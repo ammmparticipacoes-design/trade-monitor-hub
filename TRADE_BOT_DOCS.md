@@ -96,11 +96,23 @@ Atualização a cada **15 segundos**.
     "tipo": "COMPRA",
     "entrada": 140.50,
     "saida": 143.20,
+    "taxa": 0.15,
     "lucro": 2.70,
     "estrategia": "Cruzamento MA"
   }
 ]
 ```
+
+| Campo       | Tipo          | Descrição                                    |
+|-------------|---------------|----------------------------------------------|
+| `data`      | string        | Data da operação                             |
+| `ativo`     | string        | Par negociado                                |
+| `tipo`      | string        | COMPRA / VENDA                               |
+| `entrada`   | number        | Preço de entrada (USDT)                      |
+| `saida`     | number        | Preço de saída (USDT)                        |
+| `taxa`      | number        | Taxa da operação (USDT)                      |
+| `lucro`     | number        | Resultado da operação (exibido como "Resultado" na UI) |
+| `estrategia`| string        | Estratégia utilizada                         |
 
 ---
 
@@ -195,6 +207,9 @@ Retorna a configuração atual do par selecionado.
   "mean_reversao_ativo": true,
   "mean_reversao_percentual_entrada": 0.25,
   "mean_reversao_percentual_alvo": 0.50,
+  "take_profit_percentual": 0.01,
+  "stop_loss_percentual": 0.008,
+  "considerar_emas": true,
   "valor_operacao": 100.00,
   "bot_ativo": true,
   "updated_at": "2026-03-02T14:30:15"
@@ -221,6 +236,9 @@ Recebe JSON com a configuração atualizada. Atualiza ou insere (upsert por `sym
   "mean_reversao_ativo": true,
   "mean_reversao_percentual_entrada": 0.25,
   "mean_reversao_percentual_alvo": 0.50,
+  "take_profit_percentual": 0.01,
+  "stop_loss_percentual": 0.008,
+  "considerar_emas": true,
   "valor_operacao": 100.00,
   "bot_ativo": true
 }
@@ -270,7 +288,8 @@ Recebe JSON com a configuração atualizada. Atualiza ou insere (upsert por `sym
 | `tipo`       | VARCHAR(10)   | COMPRA / VENDA       |
 | `entrada`    | DECIMAL(12,4) | Preço de entrada     |
 | `saida`      | DECIMAL(12,4) | Preço de saída       |
-| `lucro`      | DECIMAL(12,4) | Resultado             |
+| `taxa`       | DECIMAL(12,4) | Taxa da operação     |
+| `lucro`      | DECIMAL(12,4) | Resultado            |
 | `estrategia` | VARCHAR(50)   | Estratégia utilizada |
 
 ---
@@ -316,6 +335,9 @@ Recebe JSON com a configuração atualizada. Atualiza ou insere (upsert por `sym
 | `mean_reversao_ativo`            | BIT           | Estratégia Mean Reversão           |
 | `mean_reversao_percentual_entrada` | DECIMAL(5,2) | % entrada no range               |
 | `mean_reversao_percentual_alvo`  | DECIMAL(5,2)  | % preço alvo                       |
+| `take_profit_percentual`             | DECIMAL(5,3)  | % take profit (ex: 0.010)          |
+| `stop_loss_percentual`               | DECIMAL(5,3)  | % stop loss (ex: 0.008)            |
+| `considerar_emas`                    | BIT           | Considerar EMAs no trade           |
 | `valor_operacao`                 | DECIMAL(10,2) | Valor por operação em USDT         |
 | `bot_ativo`                      | BIT           | Start (1) / Pause (0)             |
 | `updated_at`                     | DATETIME      | Auto-atualizado ao salvar          |
@@ -337,6 +359,9 @@ CREATE TABLE bot_config (
   mean_reversao_ativo BIT DEFAULT 0,
   mean_reversao_percentual_entrada DECIMAL(5,2) DEFAULT 0,
   mean_reversao_percentual_alvo DECIMAL(5,2) DEFAULT 0,
+  take_profit_percentual DECIMAL(5,3) DEFAULT 0,
+  stop_loss_percentual DECIMAL(5,3) DEFAULT 0,
+  considerar_emas BIT DEFAULT 0,
   valor_operacao DECIMAL(10,2) DEFAULT 0,
   bot_ativo BIT DEFAULT 0,
   updated_at DATETIME DEFAULT GETDATE()
@@ -357,6 +382,7 @@ CREATE TABLE bot_config (
 | `/trading_bot/api/api_monitor.asp`    | 30s         |
 | `/trading_bot/api/api_config.asp`     | sob demanda |
 | `/trading_bot/api/api_config_save.asp`| sob demanda |
+| `/trading_bot/api/api_unificar_ip.asp`| sob demanda |
 
 ---
 
@@ -395,12 +421,46 @@ ALTER TABLE tb_leituras ADD parametros VARCHAR(200) NULL;
 - A API `api_leituras.asp` deve retornar o campo `parametros` (texto já formatado) em vez de `mm7` e `mm40`.
 - O front-end exibe o conteúdo de `parametros` diretamente, sem formatação adicional.
 
+### 4. API `POST /trading_bot/api/api_unificar_ip.asp` — Sincronizar IP
+
+Nova API chamada silenciosamente pelo botão ao lado do "IP Anterior" no card de status. Deve copiar o valor do campo `ip` para `ip_anterior` em `tb_status_robo`.
+
+```sql
+UPDATE tb_status_robo SET ip_anterior = ip WHERE id = 1;
+```
+
+### 5. Tabela `tb_operacoes` — Novo campo `taxa`
+
+```sql
+ALTER TABLE tb_operacoes ADD taxa DECIMAL(12,4) DEFAULT 0;
+```
+
+- A API `api_operacoes.asp` deve retornar o campo `taxa` no JSON.
+- O front-end exibe a coluna "Taxa" entre "Saída" e "Resultado".
+
+### 6. Tabela `bot_config` — Novos campos `take_profit_percentual`, `stop_loss_percentual`, `considerar_emas`
+
+```sql
+ALTER TABLE bot_config ADD take_profit_percentual DECIMAL(5,3) DEFAULT 0;
+ALTER TABLE bot_config ADD stop_loss_percentual DECIMAL(5,3) DEFAULT 0;
+ALTER TABLE bot_config ADD considerar_emas BIT DEFAULT 0;
+```
+
+- A API `api_config.asp` deve retornar os 3 novos campos.
+- A API `api_config_save.asp` deve aceitar e persistir os 3 novos campos.
+
 ---
 
 ## Changelog
 
 | Data       | Alteração                                                                 |
 |------------|---------------------------------------------------------------------------|
+| 2026-03-12 | Título do browser alterado para "Trade Monitor Hub"                       |
+| 2026-03-12 | Botão sincronizar IP anterior (chama `api_unificar_ip.asp`)               |
+| 2026-03-12 | Coluna "Taxa" adicionada na tabela de operações (entre Saída e Resultado) |
+| 2026-03-12 | Coluna "Lucro" renomeada para "Resultado" na tela de operações            |
+| 2026-03-12 | Checkbox "Considerar EMAs no Trade" na tela de configuração               |
+| 2026-03-12 | Campos `take_profit_percentual` e `stop_loss_percentual` na configuração  |
 | 2026-03-06 | Adicionado campo `nome_robo` na API status e card de status               |
 | 2026-03-06 | Campo `parametros` substitui `mm7`/`mm40` na API leituras e tabela       |
 | 2026-03-06 | Adicionada estratégia Mean Reversão (checkbox + 2 campos de percentual)   |
