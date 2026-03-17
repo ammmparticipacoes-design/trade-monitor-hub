@@ -371,6 +371,9 @@ CREATE TABLE bot_config (
   take_profit_percentual DECIMAL(5,3) DEFAULT 0,
   stop_loss_percentual DECIMAL(5,3) DEFAULT 0,
   considerar_emas BIT DEFAULT 0,
+  supertrend_ativo BIT DEFAULT 0,
+  considerar_stoch_rsi BIT DEFAULT 0,
+  considerar_adx BIT DEFAULT 0,
   valor_operacao DECIMAL(10,2) DEFAULT 0,
   bot_ativo BIT DEFAULT 0,
   updated_at DATETIME DEFAULT GETDATE()
