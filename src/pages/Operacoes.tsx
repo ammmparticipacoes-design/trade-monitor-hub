@@ -125,8 +125,8 @@ const Operacoes = () => {
                     <td className="px-4 py-2.5 whitespace-nowrap text-foreground">
                       {formatCurrencyStyled(row.entrada)}
                     </td>
-                    <td className="px-4 py-2.5 whitespace-nowrap">
-                      {formatCurrencyStyled(row.saida, String(row.tipo ?? "").toUpperCase() === "COMPRA" ? "text-blue-500" : undefined)}
+                    <td className="px-4 py-2.5 whitespace-nowrap text-foreground">
+                      {formatCurrencyStyled(row.saida)}
                     </td>
                     <td className="px-4 py-2.5 whitespace-nowrap text-foreground">
                       {formatCurrencyStyled(row.taxa)}
