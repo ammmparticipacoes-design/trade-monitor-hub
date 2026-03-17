@@ -31,6 +31,9 @@ const Configuracao = () => {
     mean_reversao_percentual_entrada: 0,
     mean_reversao_percentual_alvo: 0,
     considerar_emas: false,
+    supertrend_ativo: false,
+    considerar_stoch_rsi: false,
+    considerar_adx: false,
     take_profit_percentual: 0,
     stop_loss_percentual: 0,
     valor_operacao: 0,
@@ -127,8 +130,11 @@ const Configuracao = () => {
                   ["candle_duplo_venda_ativo", "Candle Duplo Venda"],
                   ["intrabar_compra_ativo", "Intrabar Compra"],
                   ["intrabar_venda_ativo", "Intrabar Venda"],
-                  ["mean_reversao_ativo", "Mean Reversão"],
+                 ["mean_reversao_ativo", "Mean Reversão"],
                   ["considerar_emas", "Considerar EMAs no Trade"],
+                  ["supertrend_ativo", "Ativar Supertrend"],
+                  ["considerar_stoch_rsi", "Considerar Stoch RSI"],
+                  ["considerar_adx", "Considerar ADX"],
                 ] as const).map(([field, label]) => (
                   <div key={field} className="flex items-center gap-2">
                     <Checkbox

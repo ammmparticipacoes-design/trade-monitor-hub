@@ -210,6 +210,9 @@ Retorna a configuração atual do par selecionado.
   "take_profit_percentual": 0.01,
   "stop_loss_percentual": 0.008,
   "considerar_emas": true,
+  "supertrend_ativo": true,
+  "considerar_stoch_rsi": false,
+  "considerar_adx": true,
   "valor_operacao": 100.00,
   "bot_ativo": true,
   "updated_at": "2026-03-02T14:30:15"
@@ -239,6 +242,9 @@ Recebe JSON com a configuração atualizada. Atualiza ou insere (upsert por `sym
   "take_profit_percentual": 0.01,
   "stop_loss_percentual": 0.008,
   "considerar_emas": true,
+  "supertrend_ativo": true,
+  "considerar_stoch_rsi": false,
+  "considerar_adx": true,
   "valor_operacao": 100.00,
   "bot_ativo": true
 }
@@ -338,6 +344,9 @@ Recebe JSON com a configuração atualizada. Atualiza ou insere (upsert por `sym
 | `take_profit_percentual`             | DECIMAL(5,3)  | % take profit (ex: 0.010)          |
 | `stop_loss_percentual`               | DECIMAL(5,3)  | % stop loss (ex: 0.008)            |
 | `considerar_emas`                    | BIT           | Considerar EMAs no trade           |
+| `supertrend_ativo`                   | BIT           | Ativar Supertrend                  |
+| `considerar_stoch_rsi`               | BIT           | Considerar Stoch RSI               |
+| `considerar_adx`                     | BIT           | Considerar ADX                     |
 | `valor_operacao`                 | DECIMAL(10,2) | Valor por operação em USDT         |
 | `bot_ativo`                      | BIT           | Start (1) / Pause (0)             |
 | `updated_at`                     | DATETIME      | Auto-atualizado ao salvar          |
@@ -362,6 +371,9 @@ CREATE TABLE bot_config (
   take_profit_percentual DECIMAL(5,3) DEFAULT 0,
   stop_loss_percentual DECIMAL(5,3) DEFAULT 0,
   considerar_emas BIT DEFAULT 0,
+  supertrend_ativo BIT DEFAULT 0,
+  considerar_stoch_rsi BIT DEFAULT 0,
+  considerar_adx BIT DEFAULT 0,
   valor_operacao DECIMAL(10,2) DEFAULT 0,
   bot_ativo BIT DEFAULT 0,
   updated_at DATETIME DEFAULT GETDATE()
@@ -449,12 +461,25 @@ ALTER TABLE bot_config ADD considerar_emas BIT DEFAULT 0;
 - A API `api_config.asp` deve retornar os 3 novos campos.
 - A API `api_config_save.asp` deve aceitar e persistir os 3 novos campos.
 
----
+### 7. Tabela `bot_config` — Novos campos `supertrend_ativo`, `considerar_stoch_rsi`, `considerar_adx`
+
+```sql
+ALTER TABLE bot_config ADD supertrend_ativo BIT DEFAULT 0;
+ALTER TABLE bot_config ADD considerar_stoch_rsi BIT DEFAULT 0;
+ALTER TABLE bot_config ADD considerar_adx BIT DEFAULT 0;
+```
+
+- A API `api_config.asp` deve retornar os 3 novos campos.
+- A API `api_config_save.asp` deve aceitar e persistir os 3 novos campos.
 
 ## Changelog
 
 | Data       | Alteração                                                                 |
 |------------|---------------------------------------------------------------------------|
+| 2026-03-17 | Checkboxes Supertrend, Stoch RSI e ADX na configuração            |
+| 2026-03-17 | Paginação e separação visual por dia na tela de operações         |
+| 2026-03-17 | Decimais menores nos valores de entrada/saída/taxa/resultado      |
+| 2026-03-17 | HashRouter (#) para evitar erro ao recarregar página              |
 | 2026-03-12 | Título do browser alterado para "Trade Monitor Hub"                       |
 | 2026-03-12 | Botão sincronizar IP anterior (chama `api_unificar_ip.asp`)               |
 | 2026-03-12 | Coluna "Taxa" adicionada na tabela de operações (entre Saída e Resultado) |
