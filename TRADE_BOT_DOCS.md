@@ -461,7 +461,16 @@ ALTER TABLE bot_config ADD considerar_emas BIT DEFAULT 0;
 - A API `api_config.asp` deve retornar os 3 novos campos.
 - A API `api_config_save.asp` deve aceitar e persistir os 3 novos campos.
 
----
+### 7. Tabela `bot_config` — Novos campos `supertrend_ativo`, `considerar_stoch_rsi`, `considerar_adx`
+
+```sql
+ALTER TABLE bot_config ADD supertrend_ativo BIT DEFAULT 0;
+ALTER TABLE bot_config ADD considerar_stoch_rsi BIT DEFAULT 0;
+ALTER TABLE bot_config ADD considerar_adx BIT DEFAULT 0;
+```
+
+- A API `api_config.asp` deve retornar os 3 novos campos.
+- A API `api_config_save.asp` deve aceitar e persistir os 3 novos campos.
 
 ## Changelog
 
