@@ -467,6 +467,10 @@ ALTER TABLE bot_config ADD considerar_emas BIT DEFAULT 0;
 
 | Data       | Alteração                                                                 |
 |------------|---------------------------------------------------------------------------|
+| 2026-03-17 | Checkboxes Supertrend, Stoch RSI e ADX na configuração            |
+| 2026-03-17 | Paginação e separação visual por dia na tela de operações         |
+| 2026-03-17 | Decimais menores nos valores de entrada/saída/taxa/resultado      |
+| 2026-03-17 | HashRouter (#) para evitar erro ao recarregar página              |
 | 2026-03-12 | Título do browser alterado para "Trade Monitor Hub"                       |
 | 2026-03-12 | Botão sincronizar IP anterior (chama `api_unificar_ip.asp`)               |
 | 2026-03-12 | Coluna "Taxa" adicionada na tabela de operações (entre Saída e Resultado) |
