@@ -135,7 +135,8 @@ const Operacoes = () => {
                       {(() => {
                         const val = row.lucro;
                         if (typeof val !== "number") return "—";
-                        const color = val > 0 ? "text-green-500" : val < 0 ? "text-red-500" : "text-muted-foreground";
+                        const isCompra = String(row.tipo ?? "").toUpperCase() === "COMPRA";
+                        const color = isCompra ? "text-blue-500" : val > 0 ? "text-green-500" : val < 0 ? "text-red-500" : "text-muted-foreground";
                         return formatCurrencyStyled(val, color);
                       })()}
                     </td>
