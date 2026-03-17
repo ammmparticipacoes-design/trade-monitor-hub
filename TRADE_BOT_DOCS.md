@@ -242,6 +242,9 @@ Recebe JSON com a configuração atualizada. Atualiza ou insere (upsert por `sym
   "take_profit_percentual": 0.01,
   "stop_loss_percentual": 0.008,
   "considerar_emas": true,
+  "supertrend_ativo": true,
+  "considerar_stoch_rsi": false,
+  "considerar_adx": true,
   "valor_operacao": 100.00,
   "bot_ativo": true
 }
