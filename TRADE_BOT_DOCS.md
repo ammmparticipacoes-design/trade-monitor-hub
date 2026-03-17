@@ -476,6 +476,7 @@ ALTER TABLE bot_config ADD considerar_adx BIT DEFAULT 0;
 
 | Data       | Alteração                                                                 |
 |------------|---------------------------------------------------------------------------|
+| 2026-03-17 | Saída em azul para linhas de compra + legenda "Alvo" na tela de operações |
 | 2026-03-17 | Checkboxes Supertrend, Stoch RSI e ADX na configuração            |
 | 2026-03-17 | Paginação e separação visual por dia na tela de operações         |
 | 2026-03-17 | Decimais menores nos valores de entrada/saída/taxa/resultado      |
