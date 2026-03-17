@@ -344,6 +344,9 @@ Recebe JSON com a configuração atualizada. Atualiza ou insere (upsert por `sym
 | `take_profit_percentual`             | DECIMAL(5,3)  | % take profit (ex: 0.010)          |
 | `stop_loss_percentual`               | DECIMAL(5,3)  | % stop loss (ex: 0.008)            |
 | `considerar_emas`                    | BIT           | Considerar EMAs no trade           |
+| `supertrend_ativo`                   | BIT           | Ativar Supertrend                  |
+| `considerar_stoch_rsi`               | BIT           | Considerar Stoch RSI               |
+| `considerar_adx`                     | BIT           | Considerar ADX                     |
 | `valor_operacao`                 | DECIMAL(10,2) | Valor por operação em USDT         |
 | `bot_ativo`                      | BIT           | Start (1) / Pause (0)             |
 | `updated_at`                     | DATETIME      | Auto-atualizado ao salvar          |
