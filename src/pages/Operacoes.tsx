@@ -69,7 +69,13 @@ const Operacoes = () => {
   return (
     <AppLayout>
       <div className="space-y-4">
-        <h1 className="text-lg font-semibold text-foreground">Operações Realizadas</h1>
+        <div className="flex items-center justify-between">
+          <h1 className="text-lg font-semibold text-foreground">Operações Realizadas</h1>
+          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <span className="inline-block w-2.5 h-2.5 rounded-full bg-blue-500" />
+            <span>Alvo</span>
+          </div>
+        </div>
 
         <div className="overflow-x-auto rounded-lg border border-border">
           <table className="w-full text-sm">
