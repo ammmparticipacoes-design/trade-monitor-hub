@@ -21,7 +21,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <AuthProvider>
-        <BrowserRouter basename="/trading_bot">
+        <HashRouter>
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route
