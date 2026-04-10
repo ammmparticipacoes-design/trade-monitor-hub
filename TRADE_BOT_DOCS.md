@@ -16,7 +16,7 @@ Sistema front-end para monitoramento em tempo real de um robô de trading (SOL/U
 |----------------------------------|-------------------------------------------------|
 | `/trading_bot/login`             | Formulário de login                             |
 | `/trading_bot/`                  | Dashboard — status do robô + leituras de mercado|
-| `/trading_bot/monitoramento`     | Monitoramento de pares SOLUSDT vs SOLUSDC       |
+| `/trading_bot/monitoramento`     | Log da plataforma (filtros por tipo e data, paginação) |
 | `/trading_bot/operacoes`         | Operações realizadas                            |
 | `/trading_bot/lucros`            | Lucro diário acumulado                          |
 | `/trading_bot/configuracao`      | Configuração remota do robô                     |
@@ -461,7 +461,29 @@ ALTER TABLE bot_config ADD considerar_emas BIT DEFAULT 0;
 - A API `api_config.asp` deve retornar os 3 novos campos.
 - A API `api_config_save.asp` deve aceitar e persistir os 3 novos campos.
 
-### 7. Tabela `bot_config` — Novos campos `supertrend_ativo`, `considerar_stoch_rsi`, `considerar_adx`
+### 7. Tabelas de Log — `log_type` e `tb_logs`
+
+```sql
+CREATE TABLE log_type (
+  id INT PRIMARY KEY IDENTITY(1,1),
+  name VARCHAR(50) NOT NULL
+);
+
+INSERT INTO log_type (name) VALUES ('info'), ('warning'), ('error'), ('trade');
+
+CREATE TABLE tb_logs (
+  id INT PRIMARY KEY IDENTITY(1,1),
+  datahora DATETIME DEFAULT GETDATE(),
+  descricao VARCHAR(500),
+  tipo VARCHAR(50)
+);
+```
+
+- Nova API `GET /trading_bot/api/api_logs.asp` retorna array de `{ id, datahora, descricao, tipo }`.
+- Nova API `GET /trading_bot/api/api_log_types.asp` retorna array de `{ id, name }`.
+- Atualização a cada **15 segundos**.
+
+### 8. Tabela `bot_config` — Novos campos `supertrend_ativo`, `considerar_stoch_rsi`, `considerar_adx`
 
 ```sql
 ALTER TABLE bot_config ADD supertrend_ativo BIT DEFAULT 0;
@@ -476,6 +498,7 @@ ALTER TABLE bot_config ADD considerar_adx BIT DEFAULT 0;
 
 | Data       | Alteração                                                                 |
 |------------|---------------------------------------------------------------------------|
+| 2026-04-10 | Aba Monitoramento substituída por Log da Plataforma com filtros, paginação e botão copiar |
 | 2026-03-17 | Saída em azul para linhas de compra + legenda "Alvo" na tela de operações |
 | 2026-03-17 | Checkboxes Supertrend, Stoch RSI e ADX na configuração            |
 | 2026-03-17 | Paginação e separação visual por dia na tela de operações         |
