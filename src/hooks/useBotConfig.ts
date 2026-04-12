@@ -14,6 +14,14 @@ export interface BotConfig {
   mean_reversao_ativo: boolean;
   mean_reversao_percentual_entrada: number;
   mean_reversao_percentual_alvo: number;
+  mrcurta_ativa: boolean;
+  mrcurta_candles: number;
+  mrcurta_percentual: number;
+  mrlonga_ativa: boolean;
+  mrlonga_candles: number;
+  mrlonga_percentual: number;
+  mr_confirmacao_candles: number;
+  mr_confirmacao_percentual: number;
   considerar_emas: boolean;
   supertrend_ativo: boolean;
   considerar_stoch_rsi: boolean;
@@ -36,6 +44,14 @@ const defaultConfig: BotConfig = {
   mean_reversao_ativo: false,
   mean_reversao_percentual_entrada: 0,
   mean_reversao_percentual_alvo: 0,
+  mrcurta_ativa: true,
+  mrcurta_candles: 6,
+  mrcurta_percentual: 0.003,
+  mrlonga_ativa: true,
+  mrlonga_candles: 16,
+  mrlonga_percentual: 0.005,
+  mr_confirmacao_candles: 2,
+  mr_confirmacao_percentual: 0.005,
   considerar_emas: false,
   supertrend_ativo: false,
   considerar_stoch_rsi: false,

@@ -494,10 +494,30 @@ ALTER TABLE bot_config ADD considerar_adx BIT DEFAULT 0;
 - A API `api_config.asp` deve retornar os 3 novos campos.
 - A API `api_config_save.asp` deve aceitar e persistir os 3 novos campos.
 
+### 9. Tabela `bot_config` — Novos campos Mean Reversão (MR Curta / MR Longa / Confirmação)
+
+```sql
+ALTER TABLE bot_config ADD COLUMN (
+  mrcurta_ativa BOOLEAN DEFAULT TRUE,
+  mrcurta_candles INT DEFAULT 6,
+  mrcurta_percentual DECIMAL(6,4) DEFAULT 0.0030,
+  mrlonga_ativa BOOLEAN DEFAULT TRUE,
+  mrlonga_candles INT DEFAULT 16,
+  mrlonga_percentual DECIMAL(6,4) DEFAULT 0.0050,
+  mr_confirmacao_candles INT DEFAULT 2,
+  mr_confirmacao_percentual DECIMAL(6,4) DEFAULT 0.0050
+);
+```
+
+**Providências backend:**
+- A API `api_config.asp` deve retornar os 8 novos campos.
+- A API `api_config_save.asp` deve aceitar e persistir os 8 novos campos.
+
 ## Changelog
 
 | Data       | Alteração                                                                 |
 |------------|---------------------------------------------------------------------------|
+| 2026-04-12 | Campos MR Curta, MR Longa e Confirmação na seção Mean Reversão da configuração |
 | 2026-04-10 | Aba Monitoramento substituída por Log da Plataforma com filtros, paginação e botão copiar |
 | 2026-03-17 | Saída em azul para linhas de compra + legenda "Alvo" na tela de operações |
 | 2026-03-17 | Checkboxes Supertrend, Stoch RSI e ADX na configuração            |

@@ -30,6 +30,14 @@ const Configuracao = () => {
     mean_reversao_ativo: false,
     mean_reversao_percentual_entrada: 0,
     mean_reversao_percentual_alvo: 0,
+    mrcurta_ativa: true,
+    mrcurta_candles: 6,
+    mrcurta_percentual: 0.003,
+    mrlonga_ativa: true,
+    mrlonga_candles: 16,
+    mrlonga_percentual: 0.005,
+    mr_confirmacao_candles: 2,
+    mr_confirmacao_percentual: 0.005,
     considerar_emas: false,
     supertrend_ativo: false,
     considerar_stoch_rsi: false,
@@ -186,32 +194,68 @@ const Configuracao = () => {
               <CardHeader className="pb-3">
                 <CardTitle className="text-sm">Parâmetros Mean Reversão</CardTitle>
               </CardHeader>
-              <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="space-y-1.5">
-                  <Label htmlFor="mr_entrada" className="text-xs text-muted-foreground">Percentual Entrada no Range (%)</Label>
-                  <Input
-                    id="mr_entrada"
-                    type="number"
-                    step="0.01"
-                    min="0"
-                    value={form.mean_reversao_percentual_entrada || ""}
-                    onChange={handleNumber("mean_reversao_percentual_entrada")}
-                    placeholder="0.00"
-                    disabled={!form.mean_reversao_ativo}
-                  />
+              <CardContent className="space-y-6">
+                {/* Campos legados */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <Label htmlFor="mr_entrada" className="text-xs text-muted-foreground">Percentual Entrada no Range (%)</Label>
+                    <Input id="mr_entrada" type="number" step="0.01" min="0" value={form.mean_reversao_percentual_entrada || ""} onChange={handleNumber("mean_reversao_percentual_entrada")} placeholder="0.00" disabled={!form.mean_reversao_ativo} />
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label htmlFor="mr_alvo" className="text-xs text-muted-foreground">Percentual Preço Alvo (%)</Label>
+                    <Input id="mr_alvo" type="number" step="0.01" min="0" value={form.mean_reversao_percentual_alvo || ""} onChange={handleNumber("mean_reversao_percentual_alvo")} placeholder="0.00" disabled={!form.mean_reversao_ativo} />
+                  </div>
                 </div>
-                <div className="space-y-1.5">
-                  <Label htmlFor="mr_alvo" className="text-xs text-muted-foreground">Percentual Preço Alvo (%)</Label>
-                  <Input
-                    id="mr_alvo"
-                    type="number"
-                    step="0.01"
-                    min="0"
-                    value={form.mean_reversao_percentual_alvo || ""}
-                    onChange={handleNumber("mean_reversao_percentual_alvo")}
-                    placeholder="0.00"
-                    disabled={!form.mean_reversao_ativo}
-                  />
+
+                {/* MR Curta */}
+                <div className="border-t pt-4 space-y-3">
+                  <div className="flex items-center gap-2">
+                    <Checkbox id="mrcurta_ativa" checked={form.mrcurta_ativa} onCheckedChange={handleCheckbox("mrcurta_ativa")} disabled={!form.mean_reversao_ativo} />
+                    <Label htmlFor="mrcurta_ativa" className="text-sm font-medium cursor-pointer">MR Curta</Label>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="space-y-1.5">
+                      <Label htmlFor="mrcurta_candles" className="text-xs text-muted-foreground">Candles</Label>
+                      <Input id="mrcurta_candles" type="number" step="1" min="1" value={form.mrcurta_candles || ""} onChange={handleNumber("mrcurta_candles")} placeholder="6" disabled={!form.mean_reversao_ativo || !form.mrcurta_ativa} />
+                    </div>
+                    <div className="space-y-1.5">
+                      <Label htmlFor="mrcurta_percentual" className="text-xs text-muted-foreground">Percentual</Label>
+                      <Input id="mrcurta_percentual" type="number" step="0.0001" min="0" value={form.mrcurta_percentual || ""} onChange={handleNumber("mrcurta_percentual")} placeholder="0.0030" disabled={!form.mean_reversao_ativo || !form.mrcurta_ativa} />
+                    </div>
+                  </div>
+                </div>
+
+                {/* MR Longa */}
+                <div className="border-t pt-4 space-y-3">
+                  <div className="flex items-center gap-2">
+                    <Checkbox id="mrlonga_ativa" checked={form.mrlonga_ativa} onCheckedChange={handleCheckbox("mrlonga_ativa")} disabled={!form.mean_reversao_ativo} />
+                    <Label htmlFor="mrlonga_ativa" className="text-sm font-medium cursor-pointer">MR Longa</Label>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="space-y-1.5">
+                      <Label htmlFor="mrlonga_candles" className="text-xs text-muted-foreground">Candles</Label>
+                      <Input id="mrlonga_candles" type="number" step="1" min="1" value={form.mrlonga_candles || ""} onChange={handleNumber("mrlonga_candles")} placeholder="16" disabled={!form.mean_reversao_ativo || !form.mrlonga_ativa} />
+                    </div>
+                    <div className="space-y-1.5">
+                      <Label htmlFor="mrlonga_percentual" className="text-xs text-muted-foreground">Percentual</Label>
+                      <Input id="mrlonga_percentual" type="number" step="0.0001" min="0" value={form.mrlonga_percentual || ""} onChange={handleNumber("mrlonga_percentual")} placeholder="0.0050" disabled={!form.mean_reversao_ativo || !form.mrlonga_ativa} />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Confirmação */}
+                <div className="border-t pt-4 space-y-3">
+                  <span className="text-sm font-medium">Confirmação</span>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="space-y-1.5">
+                      <Label htmlFor="mr_confirmacao_candles" className="text-xs text-muted-foreground">Candles Confirmação</Label>
+                      <Input id="mr_confirmacao_candles" type="number" step="1" min="1" value={form.mr_confirmacao_candles || ""} onChange={handleNumber("mr_confirmacao_candles")} placeholder="2" disabled={!form.mean_reversao_ativo} />
+                    </div>
+                    <div className="space-y-1.5">
+                      <Label htmlFor="mr_confirmacao_percentual" className="text-xs text-muted-foreground">Percentual Confirmação</Label>
+                      <Input id="mr_confirmacao_percentual" type="number" step="0.0001" min="0" value={form.mr_confirmacao_percentual || ""} onChange={handleNumber("mr_confirmacao_percentual")} placeholder="0.0050" disabled={!form.mean_reversao_ativo} />
+                    </div>
+                  </div>
                 </div>
               </CardContent>
             </Card>
