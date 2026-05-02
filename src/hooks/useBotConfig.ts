@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { fetchJson } from "@/lib/apiFetch";
 
 const BASE_URL = "/trading_bot";
 
