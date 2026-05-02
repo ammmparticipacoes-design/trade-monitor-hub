@@ -3,6 +3,7 @@ import AppLayout from "@/components/AppLayout";
 import { useOperacoes, Operacao } from "@/hooks/useTradeApi";
 import { Loader2, AlertCircle, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import ManualTradeDialog from "@/components/ManualTradeDialog";
 
 const ITEMS_PER_PAGE = 20;
 
