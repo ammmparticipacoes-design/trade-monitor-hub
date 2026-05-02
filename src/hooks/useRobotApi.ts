@@ -1,12 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
+import { fetchJson } from "@/lib/apiFetch";
 
 const BASE_URL = "/trading_bot";
 
-async function fetchApi<T>(endpoint: string): Promise<T> {
-  const res = await fetch(`${BASE_URL}${endpoint}`);
-  if (!res.ok) throw new Error(`API error: ${res.status}`);
-  return res.json();
-}
+const fetchApi = <T,>(endpoint: string) => fetchJson<T>(`${BASE_URL}${endpoint}`);
 
 export interface RobotStatus {
   status: "OPERANTE" | "INOPERANTE";
