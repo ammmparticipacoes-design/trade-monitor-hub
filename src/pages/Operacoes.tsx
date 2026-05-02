@@ -3,6 +3,7 @@ import AppLayout from "@/components/AppLayout";
 import { useOperacoes, Operacao } from "@/hooks/useTradeApi";
 import { Loader2, AlertCircle, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import ManualTradeDialog from "@/components/ManualTradeDialog";
 
 const ITEMS_PER_PAGE = 20;
 
@@ -69,11 +70,14 @@ const Operacoes = () => {
   return (
     <AppLayout>
       <div className="space-y-4">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-3 flex-wrap">
           <h1 className="text-lg font-semibold text-foreground">Operações Realizadas</h1>
-          <div className="flex items-center gap-2 text-xs text-muted-foreground">
-            <span className="inline-block w-2.5 h-2.5 rounded-full bg-blue-500" />
-            <span>Alvo</span>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <span className="inline-block w-2.5 h-2.5 rounded-full bg-blue-500" />
+              <span>Alvo</span>
+            </div>
+            <ManualTradeDialog />
           </div>
         </div>
 

@@ -221,6 +221,44 @@ Retorna a configuração atual do par selecionado.
 
 ---
 
+### 8b. `POST /trading_bot/api/api_trade_manual.asp` — Lançar Trade Manual
+
+Recebe um JSON e insere uma operação manual em `operacoes`. Campo `estrategia` sempre `"trade manual"`.
+
+**Request body:**
+
+```json
+{
+  "ativo": "SOL/USDT",
+  "tipo": "COMPRA",
+  "data": "2026-05-02",
+  "hora": "14:30",
+  "entrada": 140.50,
+  "saida": 143.20,
+  "taxa": 0.15,
+  "taxa_moeda": "USDT",
+  "lucro": 2.70,
+  "estrategia": "trade manual"
+}
+```
+
+| Campo        | Tipo    | Descrição                                |
+|--------------|---------|------------------------------------------|
+| `ativo`      | string  | Par negociado                            |
+| `tipo`       | string  | COMPRA / VENDA                           |
+| `data`       | string  | YYYY-MM-DD                               |
+| `hora`       | string  | HH:MM                                    |
+| `entrada`    | number  | Preço de compra                          |
+| `saida`      | number  | Preço de venda                           |
+| `taxa`       | number  | Valor da taxa                            |
+| `taxa_moeda` | string  | "USDT" ou "SOL" — moeda da taxa          |
+| `lucro`      | number  | Lucro/resultado da operação              |
+| `estrategia` | string  | Sempre `"trade manual"`                  |
+
+**Response:** `{ "ok": true }` (ou erro)
+
+---
+
 ### 8. `POST /trading_bot/api/api_config_save.asp` — Salvar Configuração
 
 Recebe JSON com a configuração atualizada. Atualiza ou insere (upsert por `symbol`).
