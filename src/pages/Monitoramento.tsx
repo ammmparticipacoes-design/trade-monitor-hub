@@ -41,7 +41,7 @@ function formatDateOnly(iso: string) {
 }
 
 const Monitoramento = () => {
-  const { data: logs, isLoading, isError } = useLogData();
+  const { data: logs, isLoading, isError, error } = useLogData();
   const { data: logTypes } = useLogTypes();
 
   const availableTypes = useMemo(() => {
@@ -118,11 +118,56 @@ const Monitoramento = () => {
   }
 
   if (isError) {
+    const err = error as any;
+    const isJsonErr = err?.name === "ApiJsonError";
     return (
       <AppLayout>
-        <div className="flex items-center gap-3 py-20 justify-center text-destructive">
-          <AlertTriangle className="h-6 w-6" />
-          Erro ao carregar logs da plataforma.
+        <div className="max-w-4xl mx-auto py-10 space-y-4">
+          <div className="flex items-center gap-3 text-destructive">
+            <AlertTriangle className="h-6 w-6" />
+            <h2 className="text-lg font-bold">Erro ao carregar logs da plataforma</h2>
+          </div>
+          <div className="rounded-lg border border-destructive/40 bg-destructive/5 p-4 space-y-2 text-sm">
+            <div>
+              <span className="font-semibold">Mensagem:</span>{" "}
+              <span className="font-mono">{err?.message ?? String(err)}</span>
+            </div>
+            {isJsonErr && (
+              <>
+                {err.endpoint && (
+                  <div>
+                    <span className="font-semibold">Endpoint:</span>{" "}
+                    <span className="font-mono">{err.endpoint}</span>
+                  </div>
+                )}
+                {typeof err.status === "number" && (
+                  <div>
+                    <span className="font-semibold">HTTP Status:</span>{" "}
+                    <span className="font-mono">{err.status}</span>
+                  </div>
+                )}
+                {(err.line || err.column || err.position !== undefined) && (
+                  <div>
+                    <span className="font-semibold">Posição:</span>{" "}
+                    <span className="font-mono">
+                      offset {err.position ?? "?"} — linha {err.line ?? "?"}, coluna {err.column ?? "?"}
+                    </span>
+                  </div>
+                )}
+                {err.rawSnippet && (
+                  <div>
+                    <div className="font-semibold mb-1">Trecho da resposta:</div>
+                    <pre className="bg-muted/50 p-3 rounded text-xs overflow-x-auto whitespace-pre-wrap break-all">
+{err.rawSnippet}
+                    </pre>
+                  </div>
+                )}
+              </>
+            )}
+            <p className="text-xs text-muted-foreground pt-2">
+              Detalhes completos (incluindo a resposta inteira da API) também estão no console do navegador (F12).
+            </p>
+          </div>
         </div>
       </AppLayout>
     );
