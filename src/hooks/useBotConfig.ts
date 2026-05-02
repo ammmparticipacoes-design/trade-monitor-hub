@@ -64,19 +64,15 @@ const defaultConfig: BotConfig = {
 };
 
 async function fetchConfig(symbol: string): Promise<BotConfig> {
-  const res = await fetch(`${BASE_URL}/api/api_config.asp?symbol=${encodeURIComponent(symbol)}`);
-  if (!res.ok) throw new Error(`API error: ${res.status}`);
-  return res.json();
+  return fetchJson<BotConfig>(`${BASE_URL}/api/api_config.asp?symbol=${encodeURIComponent(symbol)}`);
 }
 
 async function saveConfig(config: BotConfig): Promise<BotConfig> {
-  const res = await fetch(`${BASE_URL}/api/api_config_save.asp`, {
+  return fetchJson<BotConfig>(`${BASE_URL}/api/api_config_save.asp`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(config),
   });
-  if (!res.ok) throw new Error(`API error: ${res.status}`);
-  return res.json();
 }
 
 export function useBotConfig(symbol: string) {
