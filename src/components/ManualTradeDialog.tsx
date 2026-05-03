@@ -75,6 +75,21 @@ const ManualTradeDialog = () => {
       return;
     }
 
+    // Conversão: se a taxa foi informada em SOL, converte para USDT usando o preço de entrada
+    // (preço do par SOL/USDT no momento da compra). Envia sempre em USDT no payload.
+    let taxaUsdt = numTaxa;
+    if (form.taxa_moeda === "SOL") {
+      if (!numEntrada || numEntrada <= 0) {
+        toast({
+          title: "Não foi possível converter taxa SOL→USDT",
+          description: "Informe um preço de entrada válido para converter a taxa em SOL.",
+          variant: "destructive",
+        });
+        return;
+      }
+      taxaUsdt = numTaxa * numEntrada;
+    }
+
     const payload = {
       ativo: form.ativo.trim(),
       tipo: form.tipo,
@@ -83,8 +98,10 @@ const ManualTradeDialog = () => {
       entrada: numEntrada,
       saida: numSaida,
       quantidade: numQuantidade,
-      taxa: numTaxa,
-      taxa_moeda: form.taxa_moeda,
+      taxa: Number(taxaUsdt.toFixed(8)),
+      taxa_moeda: "USDT",
+      taxa_original: numTaxa,
+      taxa_moeda_original: form.taxa_moeda,
       lucro: numLucro,
       estrategia: "trade manual",
     };
