@@ -75,6 +75,21 @@ const ManualTradeDialog = () => {
       return;
     }
 
+    // Conversão: se a taxa foi informada em SOL, converte para USDT usando o preço de entrada
+    // (preço do par SOL/USDT no momento da compra). Envia sempre em USDT no payload.
+    let taxaUsdt = numTaxa;
+    if (form.taxa_moeda === "SOL") {
+      if (!numEntrada || numEntrada <= 0) {
+        toast({
+          title: "Não foi possível converter taxa SOL→USDT",
+          description: "Informe um preço de entrada válido para converter a taxa em SOL.",
+          variant: "destructive",
+        });
+        return;
+      }
+      taxaUsdt = numTaxa * numEntrada;
+    }
+
     const payload = {
       ativo: form.ativo.trim(),
       tipo: form.tipo,
@@ -83,8 +98,10 @@ const ManualTradeDialog = () => {
       entrada: numEntrada,
       saida: numSaida,
       quantidade: numQuantidade,
-      taxa: numTaxa,
-      taxa_moeda: form.taxa_moeda,
+      taxa: Number(taxaUsdt.toFixed(8)),
+      taxa_moeda: "USDT",
+      taxa_original: numTaxa,
+      taxa_moeda_original: form.taxa_moeda,
       lucro: numLucro,
       estrategia: "trade manual",
     };
@@ -171,6 +188,16 @@ const ManualTradeDialog = () => {
                 </SelectContent>
               </Select>
             </div>
+            {form.taxa_moeda === "SOL" && (() => {
+              const t = parseFloat(form.taxa);
+              const p = parseFloat(form.entrada);
+              if (!Number.isFinite(t) || !Number.isFinite(p) || p <= 0) return null;
+              return (
+                <div className="col-span-2 text-xs text-muted-foreground -mt-1">
+                  Conversão: {t} SOL × {p} USDT/SOL = <span className="font-medium text-foreground">{(t * p).toFixed(8)} USDT</span> (enviado no payload)
+                </div>
+              );
+            })()}
             <div className="space-y-1 col-span-2">
               <Label htmlFor="lucro">Lucro</Label>
               <Input id="lucro" type="number" step="0.0001" value={form.lucro} onChange={(e) => update("lucro", e.target.value)} />
