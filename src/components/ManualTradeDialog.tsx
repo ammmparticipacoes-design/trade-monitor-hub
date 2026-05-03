@@ -46,6 +46,7 @@ const ManualTradeDialog = () => {
     hora: init.hora,
     entrada: "",
     saida: "",
+    quantidade: "",
     taxa: "",
     taxa_moeda: "USDT" as "USDT" | "SOL",
     lucro: "",
@@ -62,12 +63,13 @@ const ManualTradeDialog = () => {
     }
     const numEntrada = parseFloat(form.entrada);
     const numSaida = parseFloat(form.saida);
+    const numQuantidade = parseFloat(form.quantidade);
     const numTaxa = parseFloat(form.taxa);
     const numLucro = parseFloat(form.lucro);
-    if ([numEntrada, numSaida, numTaxa, numLucro].some((n) => Number.isNaN(n))) {
+    if ([numEntrada, numSaida, numQuantidade, numTaxa, numLucro].some((n) => Number.isNaN(n))) {
       toast({
         title: "Valores numéricos inválidos",
-        description: "Preencha entrada, saída, taxa e lucro com números válidos.",
+        description: "Preencha entrada, saída, quantidade, taxa e lucro com números válidos.",
         variant: "destructive",
       });
       return;
@@ -80,6 +82,7 @@ const ManualTradeDialog = () => {
       hora: form.hora,
       entrada: numEntrada,
       saida: numSaida,
+      quantidade: numQuantidade,
       taxa: numTaxa,
       taxa_moeda: form.taxa_moeda,
       lucro: numLucro,
@@ -149,6 +152,10 @@ const ManualTradeDialog = () => {
             <div className="space-y-1">
               <Label htmlFor="saida">Preço de venda (saída)</Label>
               <Input id="saida" type="number" step="0.0001" value={form.saida} onChange={(e) => update("saida", e.target.value)} />
+            </div>
+            <div className="space-y-1">
+              <Label htmlFor="quantidade">Quantidade</Label>
+              <Input id="quantidade" type="number" step="0.00000001" value={form.quantidade} onChange={(e) => update("quantidade", e.target.value)} />
             </div>
             <div className="space-y-1">
               <Label htmlFor="taxa">Taxa</Label>
