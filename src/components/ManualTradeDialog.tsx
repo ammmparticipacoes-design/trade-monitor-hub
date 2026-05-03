@@ -188,6 +188,16 @@ const ManualTradeDialog = () => {
                 </SelectContent>
               </Select>
             </div>
+            {form.taxa_moeda === "SOL" && (() => {
+              const t = parseFloat(form.taxa);
+              const p = parseFloat(form.entrada);
+              if (!Number.isFinite(t) || !Number.isFinite(p) || p <= 0) return null;
+              return (
+                <div className="col-span-2 text-xs text-muted-foreground -mt-1">
+                  Conversão: {t} SOL × {p} USDT/SOL = <span className="font-medium text-foreground">{(t * p).toFixed(8)} USDT</span> (enviado no payload)
+                </div>
+              );
+            })()}
             <div className="space-y-1 col-span-2">
               <Label htmlFor="lucro">Lucro</Label>
               <Input id="lucro" type="number" step="0.0001" value={form.lucro} onChange={(e) => update("lucro", e.target.value)} />
